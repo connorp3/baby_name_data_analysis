@@ -105,7 +105,26 @@ public class BabyData {
         return TopRankedNames;
     }
 
-    public 
+    public List MostTopRankedName (HashMap<String, Integer> topRankedNames) {
+        int max = 0;
+        String mostTopRankedName = "";
+
+        for(Map.Entry numberOneName : topRankedNames.entrySet()) {
+            int topRankFreq = ((int)numberOneName.getValue());
+            String strNumberOneName = (String)numberOneName.getKey();
+
+            if((topRankFreq == max && strNumberOneName.compareTo(mostTopRankedName) < 0)
+                    || topRankFreq > max) {
+                max = topRankFreq;
+                mostTopRankedName = strNumberOneName;
+            }
+        }
+        List mostTopRankedNameAndFreq = new ArrayList();
+        mostTopRankedNameAndFreq.add(mostTopRankedName);
+        mostTopRankedNameAndFreq.add(max);
+        return mostTopRankedNameAndFreq;
+
+    }
 
 
 

@@ -37,5 +37,16 @@ public class Main {
         nameGenderMostRecentYear = babyData.NameGenderInMostRecentYear(name, gender, year);
         System.out.println(nameGenderMostRecentYear.get(2) + ": " + nameGenderMostRecentYear.get(0)
                             + ", " + nameGenderMostRecentYear.get(1));
+
+        System.out.println("Enter a start year: ");
+        String startYear = scanner.nextLine();
+
+        System.out.println("Enter an end year: ");
+        String endYear = scanner.nextLine();
+
+        System.out.println("Enter a gender: ");
+        String gender = scanner.nextLine();
+
+        List
     }
 }
