@@ -37,12 +37,12 @@ public class BabyData {
         gender = input;
     }
 
-    public int getFileYear (String fileName) {
+    /*public int getFileYear (String fileName) {
         String strYear;
         strYear = fileName.substring(3,7);
         int year = Integer.parseInt(strYear);
         return year;
-    }
+    }*/
 
     public HashMap<Integer, Integer> yearlyNameRank (String name, String gender) throws FileNotFoundException {
 
@@ -50,7 +50,7 @@ public class BabyData {
         int year;
 
         for (BabyFile yearData : fileList) {
-            yearToRank.put(yearData.getYear(),yearData.NameGenderRank(name, gender));
+            yearToRank.put(yearData.getYear(),yearData.FindRankFromNameGender(name, gender));
         }
         return yearToRank;
     }

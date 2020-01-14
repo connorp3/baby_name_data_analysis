@@ -21,27 +21,37 @@ public class BabyFile {
         return year;
     }
 
-    public int NameGenderRank(String name, String gender) throws FileNotFoundException {
+    public int FindRankFromNameGender(String name, String gender) throws FileNotFoundException {
         //Scanner input = new Scanner(BabyData.class.getClassLoader().getResourceAsStream("ssa_complete/"+yearData));
         Scanner input = new Scanner(yearFile);
         int rank = 1;
 
         while(input.hasNextLine()) {
+            BabyEntry babyEntry = new BabyEntry(input.nextLine());
 
-            String[] dataEntry = input.nextLine().split(",");
-            List<String> entryList = Arrays.asList(dataEntry);
+            /*String[] dataEntry = input.nextLine().split(",");
+            List<String> entryList = Arrays.asList(dataEntry);*/
 
-            if (!entryList.contains(gender)) {
+            if (!babyEntry.gender.equals(gender)) {
                 continue;
             }
 
-            if (!entryList.contains(name)) {
+            if (!babyEntry.name.equals(name)) {
                 rank++;
                 continue;
             }
             break;
         }
         return rank;
+    }
+
+    public List<String> FindNameGenderFromRank(int rank, int gender) throws FileNotFoundException {
+        Scanner input = new Scanner(yearFile);
+
+        while(input.hasNextLine()) {
+
+            String[] dataEntry = input.nextLine().split(",");
+            List<String> entryList = Arrays.asList(dataEntry);
     }
 
 
