@@ -2,6 +2,7 @@ package names;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -47,11 +48,24 @@ public class BabyFile {
 
     public List<String> FindNameGenderFromRank(int rank, int gender) throws FileNotFoundException {
         Scanner input = new Scanner(yearFile);
+        int rankCounter = 1;
+        List nameAndGender = new ArrayList();
 
         while(input.hasNextLine()) {
+            BabyEntry babyEntry = new BabyEntry(input.nextLine());
 
-            String[] dataEntry = input.nextLine().split(",");
-            List<String> entryList = Arrays.asList(dataEntry);
+            if (!babyEntry.gender.equals(gender)) {
+                continue;
+            }
+
+            if (rank == rankCounter) {
+                nameAndGender.add(babyEntry.name);
+                nameAndGender.add(babyEntry.gender);
+                break;
+            }
+            rankCounter++;
+        }
+        return nameAndGender;
     }
 
 
