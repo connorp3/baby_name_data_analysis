@@ -68,5 +68,21 @@ public class BabyFile {
         return nameAndGender;
     }
 
+    public String MostPopularNameForGender(String gender) throws FileNotFoundException {
+        Scanner input = new Scanner(yearFile);
+        String mostPopularName = "";
+
+        while(input.hasNextLine()) {
+            BabyEntry firstBabyEntry = new BabyEntry(input.nextLine());
+
+            if (!firstBabyEntry.gender.equals(gender)) {
+                continue;
+            }
+            mostPopularName = firstBabyEntry.name;
+        }
+        return mostPopularName;
+    }
+
+
 
 }

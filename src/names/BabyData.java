@@ -81,8 +81,32 @@ public class BabyData {
         List nameGenderPair = new ArrayList();
         BabyFile mostRecentBabyFile = new BabyFile(mostRecentYear);
         nameGenderPair = mostRecentBabyFile.FindNameGenderFromRank(rank, gender);
+        nameGenderPair.add(mostRecentYear);
         return nameGenderPair;
     }
+
+    public HashMap<String, Integer> TopRankedNamesMap (String startYear, String endYear, String gender) throws FileNotFoundException {
+
+        HashMap<String, Integer> TopRankedNames = new HashMap<String, Integer>();
+
+        for (BabyFile yearData : fileList) {
+            if(yearData.getYear() < Integer.parseInt(startYear) ||
+                    yearData.getYear() > Integer.parseInt(endYear)) {
+                continue;
+            }
+            if(!TopRankedNames.containsKey(yearData.MostPopularNameForGender(gender))) {
+                TopRankedNames.put(yearData.MostPopularNameForGender(gender), 0);
+            }
+            int temp = TopRankedNames.get(yearData.MostPopularNameForGender(gender));
+            temp++;
+            TopRankedNames.put(yearData.MostPopularNameForGender(gender), temp);
+
+        }
+        return TopRankedNames;
+    }
+
+    public 
+
 
 
 }
