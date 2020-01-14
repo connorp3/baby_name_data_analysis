@@ -11,7 +11,7 @@ public class BabyData {
     private ArrayList<BabyFile> fileList;
     private String name;
     private String gender;
-    private int mostRecentYear;
+    private String mostRecentYear;
 
     public BabyData(String path) {
         fileList = new ArrayList<BabyFile>();
@@ -19,19 +19,20 @@ public class BabyData {
 
         String[] files = data.list();
         int maxYear = 0;
+        String strMaxYear = "";
 
         for (String file : files) {
             if(!file.equals("README.txt")) {
                 String strYear = file.substring(3,7);
 
                 int year = Integer.parseInt(strYear);
-                if(year>= maxYear) maxYear = year;
+                if(year>= maxYear) strMaxYear = strYear;
 
                 BabyFile babyFile = new BabyFile(strYear);
                 fileList.add(babyFile);
             }
         }
-        mostRecentYear = maxYear;
+        mostRecentYear = strMaxYear;
 
     }
 
@@ -74,8 +75,13 @@ public class BabyData {
         return yearToRank;
     }
 
-    public List<String> NameGenderInMostRecentYear (String name, String gender, String year) {
-
+    public List NameGenderInMostRecentYear (String name, String gender, String year) throws FileNotFoundException {
+        BabyFile babyFile = new BabyFile(year);
+        int rank = babyFile.FindRankFromNameGender(name, gender);
+        List nameGenderPair = new ArrayList();
+        BabyFile mostRecentBabyFile = new BabyFile(mostRecentYear);
+        nameGenderPair = mostRecentBabyFile.FindNameGenderFromRank(rank, gender);
+        return nameGenderPair;
     }
 
 

@@ -46,7 +46,7 @@ public class BabyFile {
         return rank;
     }
 
-    public List<String> FindNameGenderFromRank(int rank, int gender) throws FileNotFoundException {
+    public List<String> FindNameGenderFromRank(int rank, String gender) throws FileNotFoundException {
         Scanner input = new Scanner(yearFile);
         int rankCounter = 1;
         List nameAndGender = new ArrayList();
