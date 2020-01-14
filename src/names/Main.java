@@ -24,7 +24,7 @@ public class Main {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }*/
 
-        System.out.println("Enter a name: ");
+        /*System.out.println("Enter a name: ");
         String name = scanner.nextLine();
 
         System.out.println("Enter a gender: ");
@@ -36,7 +36,7 @@ public class Main {
         List nameGenderMostRecentYear = new ArrayList<>();
         nameGenderMostRecentYear = babyData.NameGenderInMostRecentYear(name, gender, year);
         System.out.println(nameGenderMostRecentYear.get(2) + ": " + nameGenderMostRecentYear.get(0)
-                            + ", " + nameGenderMostRecentYear.get(1));
+                            + ", " + nameGenderMostRecentYear.get(1));*/
 
         System.out.println("Enter a start year: ");
         String startYear = scanner.nextLine();
@@ -47,6 +47,13 @@ public class Main {
         System.out.println("Enter a gender: ");
         String gender = scanner.nextLine();
 
-        List
+        HashMap<String, Integer> numberOneNames = new HashMap<String, Integer>();
+        numberOneNames = babyData.TopRankedNamesMap(startYear, endYear, gender);
+
+        List mostCommonNumberOneName = new ArrayList();
+        mostCommonNumberOneName = babyData.MostTopRankedName(numberOneNames);
+
+        System.out.println(mostCommonNumberOneName.get(0));
+        System.out.println(mostCommonNumberOneName.get(1));
     }
 }

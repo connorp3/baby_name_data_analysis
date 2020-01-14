@@ -79,6 +79,7 @@ public class BabyFile {
                 continue;
             }
             mostPopularName = firstBabyEntry.name;
+            break;
         }
         return mostPopularName;
     }
