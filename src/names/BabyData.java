@@ -11,9 +11,28 @@ public class BabyData {
     private ArrayList<BabyFile> fileList;
     private String name;
     private String gender;
+    private int mostRecentYear;
 
-    public BabyData() {
+    public BabyData(String path) {
         fileList = new ArrayList<BabyFile>();
+        File data = new File(path);
+
+        String[] files = data.list();
+        int maxYear = 0;
+
+        for (String file : files) {
+            if(!file.equals("README.txt")) {
+                String strYear = file.substring(3,7);
+
+                int year = Integer.parseInt(strYear);
+                if(year>= maxYear) maxYear = year;
+
+                BabyFile babyFile = new BabyFile(strYear);
+                fileList.add(babyFile);
+            }
+        }
+        mostRecentYear = maxYear;
+
     }
 
     public void setFileList (String path) {
@@ -54,5 +73,10 @@ public class BabyData {
         }
         return yearToRank;
     }
-    
+
+    public List<String> NameGenderInMostRecentYear (String name, String gender, String year) {
+
+    }
+
+
 }
