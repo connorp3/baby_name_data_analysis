@@ -7,7 +7,9 @@ import java.io.File;
  * Feel free to completely change this code or delete it entirely. 
  */
 public class BabyData {
-    public ArrayList<String> fileList;
+    private ArrayList<String> fileList;
+    private String name;
+    private String gender;
 
     public BabyData() {
         fileList = new ArrayList<>();
@@ -24,6 +26,14 @@ public class BabyData {
             }
         }
     }
+
+    public void setName (String input) {
+        name = input;
+    }
+    public void setGender (String input) {
+        gender = input;
+    }
+
     public int getFileYear (String fileName) {
         String strYear;
         strYear = fileName.substring(3,7);
