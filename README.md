@@ -4,11 +4,11 @@ data
 This project uses data about [baby names from the US Social Security Administration](https://www.ssa.gov/oact/babynames/limits.html) to answer specific questions. 
 
 
-Name: 
+Name: Connor Penny
 
 ### Timeline
 
-Start Date: 
+Start Date: 1/12/2020
 
 Finish Date: 
 
