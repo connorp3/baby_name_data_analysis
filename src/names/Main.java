@@ -1,11 +1,12 @@
 package names;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main (String[] args) {
+    public static void main (String[] args) throws FileNotFoundException {
         BabyData babyData = new BabyData();
         babyData.setFileList("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete");
 

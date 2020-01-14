@@ -1,4 +1,5 @@
 package names;
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.io.File;
 
@@ -7,12 +8,12 @@ import java.io.File;
  * Feel free to completely change this code or delete it entirely. 
  */
 public class BabyData {
-    private ArrayList<String> fileList;
+    private ArrayList<BabyFile> fileList;
     private String name;
     private String gender;
 
     public BabyData() {
-        fileList = new ArrayList<>();
+        fileList = new ArrayList<BabyFile>();
     }
 
     public void setFileList (String path) {
@@ -22,7 +23,9 @@ public class BabyData {
 
         for (String file : files) {
             if(!file.equals("README.txt")) {
-                fileList.add(file);
+                String strYear = file.substring(3,7);
+                BabyFile babyFile = new BabyFile(strYear);
+                fileList.add(babyFile);
             }
         }
     }
@@ -41,33 +44,13 @@ public class BabyData {
         return year;
     }
 
-    public HashMap<Integer, Integer> yearlyNameRank (String name, String gender) {
+    public HashMap<Integer, Integer> yearlyNameRank (String name, String gender) throws FileNotFoundException {
 
         HashMap<Integer, Integer> yearToRank = new HashMap<Integer, Integer>();
         int year;
 
-        for (String yearData : fileList) {
-            int rank = 1;
-            year = getFileYear(yearData);
-            Scanner input = new Scanner(BabyData.class.getClassLoader().getResourceAsStream("ssa_complete/"+yearData));
-
-            while(input.hasNextLine()) {
-
-                String[] dataEntry = input.nextLine().split(",");
-                List<String> entryList = Arrays.asList(dataEntry);
-
-                if (!entryList.contains(gender)) {
-                    continue;
-                }
-
-                if (!entryList.contains(name)) {
-                    rank++;
-                    continue;
-                }
-
-                yearToRank.put(year, rank);
-                break;
-            }
+        for (BabyFile yearData : fileList) {
+            yearToRank.put(yearData.getYear(),yearData.NameGenderRank(name, gender));
         }
         return yearToRank;
     }
