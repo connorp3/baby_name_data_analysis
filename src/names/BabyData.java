@@ -126,7 +126,7 @@ public class BabyData {
 
     }
 
-    public Character MostPopularLetter(String startYear, String endYear, String gender) throws FileNotFoundException {
+    public HashMap<Character, Integer> RangeFirstLetterCount(String startYear, String endYear, String gender) throws FileNotFoundException {
         HashMap<Character, Integer> rangeLetterPopularity = new HashMap<Character, Integer>();
 
         for (BabyFile yearData : fileList) {
@@ -138,16 +138,32 @@ public class BabyData {
             yearLetterPopularity = yearData.FirstLetterCount(gender);
 
             for(Map.Entry firstLetter : yearLetterPopularity.entrySet()) {
-                if(rangeLetterPopularity.containsKey(firstLetter.getKey())) {
-                    Character charFirstLetter = (Character)firstLetter.getKey();
+                Character charFirstLetter = (Character) firstLetter.getKey();
+                if (rangeLetterPopularity.containsKey(firstLetter.getKey())) {
                     rangeLetterPopularity.put(charFirstLetter, 0);
                 }
-                int temp = rangeLetterPopularity.get()
-                int firstLetterFreq = ((int)firstLetter.getValue());
-                String strNumberOneName = (String)numberOneName.getKey();
+                int firstLetterFreq = ((int) firstLetter.getValue());
+                int temp = rangeLetterPopularity.get(charFirstLetter);
+                temp += firstLetterFreq;
+                rangeLetterPopularity.put(charFirstLetter, firstLetterFreq);
             }
-
         }
+        return rangeLetterPopularity;
+    }
+    
+    public Character MostPopularLetter (HashMap<Character, Integer> firstLetterFreq) {
+        int max = 0;
+        Character mostPopularLetter = null;
+        for(Map.Entry firstLetter : firstLetterFreq.entrySet()) {
+            int freq = (int)firstLetter.getValue();
+            Character charFirstLetter = (Character) firstLetter.getKey();
+            if(freq > max) {
+                max = freq;
+                mostPopularLetter = charFirstLetter;
+            }
+        }
+        return mostPopularLetter;
+        
     }
 
 
