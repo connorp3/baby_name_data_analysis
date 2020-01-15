@@ -47,13 +47,17 @@ public class Main {
         System.out.println("Enter a gender: ");
         String gender = scanner.nextLine();
 
-        HashMap<String, Integer> numberOneNames = new HashMap<String, Integer>();
+        /*HashMap<String, Integer> numberOneNames = new HashMap<String, Integer>();
         numberOneNames = babyData.TopRankedNamesMap(startYear, endYear, gender);
 
         List mostCommonNumberOneName = new ArrayList();
         mostCommonNumberOneName = babyData.MostTopRankedName(numberOneNames);
 
         System.out.println(mostCommonNumberOneName.get(0));
-        System.out.println(mostCommonNumberOneName.get(1));
+        System.out.println(mostCommonNumberOneName.get(1));*/
+
+        List topNamesForLetter;
+        topNamesForLetter = babyData.MostPopularLetterNames(startYear, endYear, gender);
+        System.out.println(topNamesForLetter);
     }
 }

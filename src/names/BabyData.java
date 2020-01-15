@@ -148,7 +148,7 @@ public class BabyData {
 
             for(Map.Entry firstLetter : yearLetterPopularity.entrySet()) {
                 Character charFirstLetter = (Character) firstLetter.getKey();
-                if (rangeLetterPopularity.containsKey(firstLetter.getKey())) {
+                if (!rangeLetterPopularity.containsKey(firstLetter.getKey())) {
                     rangeLetterPopularity.put(charFirstLetter, 0);
                 }
                 int firstLetterFreq = ((int) firstLetter.getValue());
@@ -174,7 +174,23 @@ public class BabyData {
         return mostPopularLetter;
     }
 
-    public List<> MostPopularLetterNames ()
+    public List MostPopularLetterNames (String startYear, String endYear, String gender) throws FileNotFoundException {
+        HashMap<Character, Integer> firstLetterCountMap = new HashMap<>();
+        firstLetterCountMap = RangeFirstLetterCount(startYear, endYear, gender);
+        Character topLetter = MostPopularLetter(firstLetterCountMap);
+        ArrayList<BabyFile> rangeYearData;
+        rangeYearData = RangeOfYearsData(startYear, endYear);
+        HashSet<String> fullNameSet = new HashSet<>();
+
+        for (BabyFile yearData : rangeYearData) {
+            HashSet<String> nameSet;
+            nameSet = yearData.NamesOfCertainLetter(topLetter);
+            fullNameSet.addAll(nameSet);
+        }
+        List fullNameList = new ArrayList(fullNameSet);
+        return fullNameList;
+
+    }
 
 
 

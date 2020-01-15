@@ -83,7 +83,6 @@ public class BabyFile {
 
     public HashMap<Character, Integer> FirstLetterCount(String gender) throws FileNotFoundException {
         Scanner input = new Scanner(yearFile);
-        String mostPopularName = "";
         HashMap<Character, Integer> LetterPopularity = new HashMap<Character, Integer>();
 
         while(input.hasNextLine()) {
@@ -102,6 +101,19 @@ public class BabyFile {
             LetterPopularity.put(firstBabyEntry.firstLetter, temp);
         }
         return LetterPopularity;
+    }
+
+    public HashSet<String> NamesOfCertainLetter(Character firstLetter) throws FileNotFoundException {
+        Scanner input = new Scanner(yearFile);
+        HashSet<String> nameSet = new HashSet<>();
+        while(input.hasNextLine()) {
+            BabyEntry babyEntry = new BabyEntry(input.nextLine());
+
+            if(babyEntry.firstLetter == firstLetter) {
+                nameSet.add(babyEntry.name);
+            }
+        }
+        return nameSet;
     }
 
 
