@@ -2,10 +2,7 @@ package names;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class BabyFile {
     private File yearFile;
@@ -82,6 +79,29 @@ public class BabyFile {
             break;
         }
         return mostPopularName;
+    }
+
+    public HashMap<Character, Integer> FirstLetterCount(String gender) throws FileNotFoundException {
+        Scanner input = new Scanner(yearFile);
+        String mostPopularName = "";
+        HashMap<Character, Integer> LetterPopularity = new HashMap<Character, Integer>();
+
+        while(input.hasNextLine()) {
+            BabyEntry firstBabyEntry = new BabyEntry(input.nextLine());
+
+            if (!firstBabyEntry.gender.equals(gender)) {
+                continue;
+            }
+
+            if (!LetterPopularity.containsKey(firstBabyEntry.firstLetter)) {
+                LetterPopularity.put(firstBabyEntry.firstLetter, 0);
+            }
+
+            int temp = LetterPopularity.get(firstBabyEntry.firstLetter);
+            temp += firstBabyEntry.nameCount;
+            LetterPopularity.put(firstBabyEntry.firstLetter, temp);
+        }
+        return LetterPopularity;
     }
 
 

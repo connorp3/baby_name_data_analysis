@@ -126,6 +126,30 @@ public class BabyData {
 
     }
 
+    public Character MostPopularLetter(String startYear, String endYear, String gender) throws FileNotFoundException {
+        HashMap<Character, Integer> rangeLetterPopularity = new HashMap<Character, Integer>();
+
+        for (BabyFile yearData : fileList) {
+            if (yearData.getYear() < Integer.parseInt(startYear) ||
+                    yearData.getYear() > Integer.parseInt(endYear)) {
+                continue;
+            }
+            HashMap<Character, Integer> yearLetterPopularity = new HashMap<Character, Integer>();
+            yearLetterPopularity = yearData.FirstLetterCount(gender);
+
+            for(Map.Entry firstLetter : yearLetterPopularity.entrySet()) {
+                if(rangeLetterPopularity.containsKey(firstLetter.getKey())) {
+                    Character charFirstLetter = (Character)firstLetter.getKey();
+                    rangeLetterPopularity.put(charFirstLetter, 0);
+                }
+                int temp = rangeLetterPopularity.get()
+                int firstLetterFreq = ((int)firstLetter.getValue());
+                String strNumberOneName = (String)numberOneName.getKey();
+            }
+
+        }
+    }
+
 
 
 }
