@@ -2,6 +2,7 @@ package names;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.io.File;
+import java.util.Collection;
 
 
 /**
@@ -184,10 +185,11 @@ public class BabyData {
 
         for (BabyFile yearData : rangeYearData) {
             HashSet<String> nameSet;
-            nameSet = yearData.NamesOfCertainLetter(topLetter);
+            nameSet = yearData.NamesOfCertainLetter(topLetter, gender);
             fullNameSet.addAll(nameSet);
         }
         List fullNameList = new ArrayList(fullNameSet);
+        Collections.sort(fullNameList);
         return fullNameList;
 
     }

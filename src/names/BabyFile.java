@@ -103,13 +103,13 @@ public class BabyFile {
         return LetterPopularity;
     }
 
-    public HashSet<String> NamesOfCertainLetter(Character firstLetter) throws FileNotFoundException {
+    public HashSet<String> NamesOfCertainLetter(Character firstLetter, String gender) throws FileNotFoundException {
         Scanner input = new Scanner(yearFile);
         HashSet<String> nameSet = new HashSet<>();
         while(input.hasNextLine()) {
             BabyEntry babyEntry = new BabyEntry(input.nextLine());
 
-            if(babyEntry.firstLetter == firstLetter) {
+            if(babyEntry.firstLetter == firstLetter && babyEntry.gender.equals(gender)) {
                 nameSet.add(babyEntry.name);
             }
         }
