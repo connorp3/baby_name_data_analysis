@@ -63,6 +63,17 @@ public class BabyData {
         int year = Integer.parseInt(strYear);
         return year;
     }*/
+    public ArrayList<BabyFile> RangeOfYearsData (String startYear, String endYear) {
+        ArrayList<BabyFile> babyFilesRangeOfYears = new ArrayList<BabyFile>();
+        for (BabyFile yearData : fileList) {
+            if(yearData.getYear() >= Integer.parseInt(startYear) &&
+                    yearData.getYear() <= Integer.parseInt(endYear)) {
+                babyFilesRangeOfYears.add(yearData);
+            }
+        }
+        return babyFilesRangeOfYears;
+    }
+
 
     public HashMap<Integer, Integer> yearlyNameRank (String name, String gender) throws FileNotFoundException {
 
@@ -88,12 +99,11 @@ public class BabyData {
     public HashMap<String, Integer> TopRankedNamesMap (String startYear, String endYear, String gender) throws FileNotFoundException {
 
         HashMap<String, Integer> TopRankedNames = new HashMap<String, Integer>();
+        ArrayList<BabyFile> rangeYearData = new ArrayList<>();
+        rangeYearData = RangeOfYearsData(startYear, endYear);
 
-        for (BabyFile yearData : fileList) {
-            if(yearData.getYear() < Integer.parseInt(startYear) ||
-                    yearData.getYear() > Integer.parseInt(endYear)) {
-                continue;
-            }
+        for (BabyFile yearData : rangeYearData) {
+
             if(!TopRankedNames.containsKey(yearData.MostPopularNameForGender(gender))) {
                 TopRankedNames.put(yearData.MostPopularNameForGender(gender), 0);
             }
@@ -128,13 +138,12 @@ public class BabyData {
 
     public HashMap<Character, Integer> RangeFirstLetterCount(String startYear, String endYear, String gender) throws FileNotFoundException {
         HashMap<Character, Integer> rangeLetterPopularity = new HashMap<Character, Integer>();
+        ArrayList<BabyFile> rangeYearData = new ArrayList<>();
+        rangeYearData = RangeOfYearsData(startYear, endYear);
 
-        for (BabyFile yearData : fileList) {
-            if (yearData.getYear() < Integer.parseInt(startYear) ||
-                    yearData.getYear() > Integer.parseInt(endYear)) {
-                continue;
-            }
-            HashMap<Character, Integer> yearLetterPopularity = new HashMap<Character, Integer>();
+        for (BabyFile yearData : rangeYearData) {
+
+            HashMap<Character, Integer> yearLetterPopularity;
             yearLetterPopularity = yearData.FirstLetterCount(gender);
 
             for(Map.Entry firstLetter : yearLetterPopularity.entrySet()) {
@@ -163,8 +172,9 @@ public class BabyData {
             }
         }
         return mostPopularLetter;
-        
     }
+
+    public List<> MostPopularLetterNames ()
 
 
 
