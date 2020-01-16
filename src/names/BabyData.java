@@ -2,7 +2,6 @@ package names;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.io.File;
-import java.util.Collection;
 
 
 /**
@@ -11,14 +10,13 @@ import java.util.Collection;
 public class BabyData {
     private ArrayList<BabyFile> fileList;
     private String mostRecentYear;
-    private File dataSet;
     private String filePath;
     static final int YEAR_IN_FILE_NAME_START = 3;
     static final int YEAR_IN_FILE_NAME_END = 7;
 
     public BabyData(String path) throws FileNotFoundException {
-        fileList = new ArrayList<BabyFile>();
-        dataSet = new File(path);
+        fileList = new ArrayList<>();
+        File dataSet = new File(path);
         filePath = path;
 
         String[] files = dataSet.list();
@@ -40,12 +38,8 @@ public class BabyData {
 
     }
 
-    public File getDataSet() {
-        return dataSet;
-    }
-
     public ArrayList<BabyFile> RangeOfYearsData (String startYear, String endYear) {
-        ArrayList<BabyFile> babyFilesRangeOfYears = new ArrayList<BabyFile>();
+        ArrayList<BabyFile> babyFilesRangeOfYears = new ArrayList<>();
         for (BabyFile yearData : fileList) {
             if(yearData.getYear() >= Integer.parseInt(startYear) &&
                     yearData.getYear() <= Integer.parseInt(endYear)) {
@@ -56,9 +50,9 @@ public class BabyData {
     }
 
 
-    public HashMap<Integer, Integer> yearlyNameRank (String name, String gender) throws FileNotFoundException {
+    public HashMap<Integer, Integer> yearlyNameRank (String name, String gender) {
 
-        HashMap<Integer, Integer> yearToRank = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> yearToRank = new HashMap<>();
         int year;
 
         for (BabyFile yearData : fileList) {

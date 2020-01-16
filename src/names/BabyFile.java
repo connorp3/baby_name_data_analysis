@@ -5,15 +5,13 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class BabyFile {
-    private File yearFile;
-    private String yearFileString;
     private int year;
     private ArrayList<BabyEntry> babyEntries = new ArrayList<>();
     static final String FILE_NAME_PREFIX = "yob";
 
     public BabyFile(String strYear, String path) throws FileNotFoundException {
-        yearFileString = FILE_NAME_PREFIX + strYear + ".txt";
-        yearFile = new File(path + "\\" + yearFileString);
+        String yearFileString = FILE_NAME_PREFIX + strYear + ".txt";
+        File yearFile = new File(path + "\\" + yearFileString);
         year = Integer.parseInt(strYear);
 
         Scanner input = new Scanner(yearFile);
@@ -41,7 +39,7 @@ public class BabyFile {
         return babyEntriesForGender;
     }
 
-    public int FindRankFromNameGender(String name, String gender) throws FileNotFoundException {
+    public int FindRankFromNameGender(String name, String gender) {
 
         int rank = 1;
         ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
@@ -57,10 +55,10 @@ public class BabyFile {
         return rank;
     }
 
-    public List<String> FindNameGenderFromRank(int rank, String gender) throws FileNotFoundException {
+    public List<String> FindNameGenderFromRank(int rank, String gender) {
 
         int rankCounter = 1;
-        List nameAndGender = new ArrayList();
+        List<String> nameAndGender = new ArrayList<>();
         ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
 
         for(BabyEntry baby : babyEntriesList) {
@@ -75,18 +73,17 @@ public class BabyFile {
         return nameAndGender;
     }
 
-    public String MostPopularNameForGender(String gender) throws FileNotFoundException {
+    public String MostPopularNameForGender(String gender) {
 
         ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
         BabyEntry mostPopularBabyEntry = babyEntriesList.get(0);
-        String mostPopularName = mostPopularBabyEntry.getName();
 
-        return mostPopularName;
+        return mostPopularBabyEntry.getName();
     }
 
-    public HashMap<Character, Integer> FirstLetterCount(String gender) throws FileNotFoundException {
+    public HashMap<Character, Integer> FirstLetterCount(String gender) {
 
-        HashMap<Character, Integer> LetterPopularity = new HashMap<Character, Integer>();
+        HashMap<Character, Integer> LetterPopularity = new HashMap<>();
         ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
 
         for(BabyEntry baby : babyEntriesList) {
@@ -102,7 +99,7 @@ public class BabyFile {
         return LetterPopularity;
     }
 
-    public HashSet<String> NamesOfCertainLetter(Character firstLetter, String gender) throws FileNotFoundException {
+    public HashSet<String> NamesOfCertainLetter(Character firstLetter, String gender) {
 
         HashSet<String> nameSet = new HashSet<>();
         ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
