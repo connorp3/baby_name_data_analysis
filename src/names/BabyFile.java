@@ -8,33 +8,48 @@ public class BabyFile {
     private File yearFile;
     private String yearFileString;
     private int year;
+    private ArrayList<BabyEntry> babyEntries;
+    static final String FILE_PATH = "C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete\\";
+    static final String FILE_NAME_PREFIX = "yob";
 
-    public BabyFile(String strYear) {
-        yearFileString = "yob" + strYear + ".txt";
-        yearFile = new File("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete\\"+yearFileString);
+    public BabyFile(String strYear) throws FileNotFoundException {
+        yearFileString = FILE_NAME_PREFIX + strYear + ".txt";
+        yearFile = new File(FILE_PATH + yearFileString);
         year = Integer.parseInt(strYear);
+
+        Scanner input = new Scanner(yearFile);
+        while (input.hasNextLine()) {
+            BabyEntry babyEntry = new BabyEntry(input.nextLine());
+            babyEntries.add(babyEntry);
+        }
     }
 
     public int getYear() {
         return year;
     }
 
-    public int FindRankFromNameGender(String name, String gender) throws FileNotFoundException {
-        //Scanner input = new Scanner(BabyData.class.getClassLoader().getResourceAsStream("ssa_complete/"+yearData));
-        Scanner input = new Scanner(yearFile);
-        int rank = 1;
+    public ArrayList<BabyEntry> getBabyEntries() {
+        return babyEntries;
+    }
 
-        while(input.hasNextLine()) {
-            BabyEntry babyEntry = new BabyEntry(input.nextLine());
-
-            /*String[] dataEntry = input.nextLine().split(",");
-            List<String> entryList = Arrays.asList(dataEntry);*/
-
-            if (!babyEntry.gender.equals(gender)) {
-                continue;
+    public ArrayList<BabyEntry> getBabyEntriesForGender(String gender) {
+        ArrayList<BabyEntry> babyEntriesForGender = new ArrayList<>();
+        for (BabyEntry baby : getBabyEntries()) {
+            if (baby.getGender().equals(gender)) {
+                babyEntriesForGender.add(baby);
             }
+        }
+        return babyEntriesForGender;
+    }
 
-            if (!babyEntry.name.equals(name)) {
+    public int FindRankFromNameGender(String name, String gender) throws FileNotFoundException {
+
+        int rank = 1;
+        ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
+
+        for(BabyEntry baby : babyEntriesList) {
+
+            if (!baby.getName().equals(name)) {
                 rank++;
                 continue;
             }
@@ -44,20 +59,16 @@ public class BabyFile {
     }
 
     public List<String> FindNameGenderFromRank(int rank, String gender) throws FileNotFoundException {
-        Scanner input = new Scanner(yearFile);
+
         int rankCounter = 1;
         List nameAndGender = new ArrayList();
+        ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
 
-        while(input.hasNextLine()) {
-            BabyEntry babyEntry = new BabyEntry(input.nextLine());
-
-            if (!babyEntry.gender.equals(gender)) {
-                continue;
-            }
+        for(BabyEntry baby : babyEntriesList) {
 
             if (rank == rankCounter) {
-                nameAndGender.add(babyEntry.name);
-                nameAndGender.add(babyEntry.gender);
+                nameAndGender.add(baby.getName());
+                nameAndGender.add(baby.getGender());
                 break;
             }
             rankCounter++;
@@ -66,51 +77,41 @@ public class BabyFile {
     }
 
     public String MostPopularNameForGender(String gender) throws FileNotFoundException {
-        Scanner input = new Scanner(yearFile);
-        String mostPopularName = "";
 
-        while(input.hasNextLine()) {
-            BabyEntry firstBabyEntry = new BabyEntry(input.nextLine());
+        ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
+        BabyEntry mostPopularBabyEntry = babyEntriesList.get(0);
+        String mostPopularName = mostPopularBabyEntry.getName();
 
-            if (!firstBabyEntry.gender.equals(gender)) {
-                continue;
-            }
-            mostPopularName = firstBabyEntry.name;
-            break;
-        }
         return mostPopularName;
     }
 
     public HashMap<Character, Integer> FirstLetterCount(String gender) throws FileNotFoundException {
-        Scanner input = new Scanner(yearFile);
+
         HashMap<Character, Integer> LetterPopularity = new HashMap<Character, Integer>();
+        ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
 
-        while(input.hasNextLine()) {
-            BabyEntry firstBabyEntry = new BabyEntry(input.nextLine());
+        for(BabyEntry baby : babyEntriesList) {
 
-            if (!firstBabyEntry.gender.equals(gender)) {
-                continue;
+            if (!LetterPopularity.containsKey(baby.getFirstLetter())) {
+                LetterPopularity.put(baby.getFirstLetter(), 0);
             }
 
-            if (!LetterPopularity.containsKey(firstBabyEntry.firstLetter)) {
-                LetterPopularity.put(firstBabyEntry.firstLetter, 0);
-            }
-
-            int temp = LetterPopularity.get(firstBabyEntry.firstLetter);
-            temp += firstBabyEntry.nameCount;
-            LetterPopularity.put(firstBabyEntry.firstLetter, temp);
+            int temp = LetterPopularity.get(baby.getFirstLetter());
+            temp += baby.getNameCount();
+            LetterPopularity.put(baby.getFirstLetter(), temp);
         }
         return LetterPopularity;
     }
 
     public HashSet<String> NamesOfCertainLetter(Character firstLetter, String gender) throws FileNotFoundException {
-        Scanner input = new Scanner(yearFile);
-        HashSet<String> nameSet = new HashSet<>();
-        while(input.hasNextLine()) {
-            BabyEntry babyEntry = new BabyEntry(input.nextLine());
 
-            if(babyEntry.firstLetter == firstLetter && babyEntry.gender.equals(gender)) {
-                nameSet.add(babyEntry.name);
+        HashSet<String> nameSet = new HashSet<>();
+        ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
+
+        for(BabyEntry baby : babyEntriesList) {
+
+            if(baby.getFirstLetter() == firstLetter) {
+                nameSet.add(baby.getName());
             }
         }
         return nameSet;

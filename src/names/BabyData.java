@@ -14,7 +14,7 @@ public class BabyData {
     private String gender;
     private String mostRecentYear;
 
-    public BabyData(String path) {
+    public BabyData(String path) throws FileNotFoundException {
         fileList = new ArrayList<BabyFile>();
         File data = new File(path);
 
@@ -37,7 +37,7 @@ public class BabyData {
 
     }
 
-    public void setFileList (String path) {
+    public void setFileList (String path) throws FileNotFoundException {
         File data = new File(path);
 
         String[] files = data.list();
