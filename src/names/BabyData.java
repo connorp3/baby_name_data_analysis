@@ -10,26 +10,29 @@ import java.util.Collection;
  */
 public class BabyData {
     private ArrayList<BabyFile> fileList;
-    private String name;
-    private String gender;
     private String mostRecentYear;
+    private File dataSet;
+    private String filePath;
+    static final int YEAR_IN_FILE_NAME_START = 3;
+    static final int YEAR_IN_FILE_NAME_END = 7;
 
     public BabyData(String path) throws FileNotFoundException {
         fileList = new ArrayList<BabyFile>();
-        File data = new File(path);
+        dataSet = new File(path);
+        filePath = path;
 
-        String[] files = data.list();
+        String[] files = dataSet.list();
         int maxYear = 0;
         String strMaxYear = "";
 
         for (String file : files) {
             if(!file.equals("README.txt")) {
-                String strYear = file.substring(3,7);
+                String strYear = file.substring(YEAR_IN_FILE_NAME_START, YEAR_IN_FILE_NAME_END);
 
                 int year = Integer.parseInt(strYear);
                 if(year>= maxYear) strMaxYear = strYear;
 
-                BabyFile babyFile = new BabyFile(strYear);
+                BabyFile babyFile = new BabyFile(strYear, filePath);
                 fileList.add(babyFile);
             }
         }
@@ -37,33 +40,10 @@ public class BabyData {
 
     }
 
-    public void setFileList (String path) throws FileNotFoundException {
-        File data = new File(path);
-
-        String[] files = data.list();
-
-        for (String file : files) {
-            if(!file.equals("README.txt")) {
-                String strYear = file.substring(3,7);
-                BabyFile babyFile = new BabyFile(strYear);
-                fileList.add(babyFile);
-            }
-        }
+    public File getDataSet() {
+        return dataSet;
     }
 
-    public void setName (String input) {
-        name = input;
-    }
-    public void setGender (String input) {
-        gender = input;
-    }
-
-    /*public int getFileYear (String fileName) {
-        String strYear;
-        strYear = fileName.substring(3,7);
-        int year = Integer.parseInt(strYear);
-        return year;
-    }*/
     public ArrayList<BabyFile> RangeOfYearsData (String startYear, String endYear) {
         ArrayList<BabyFile> babyFilesRangeOfYears = new ArrayList<BabyFile>();
         for (BabyFile yearData : fileList) {
@@ -88,10 +68,10 @@ public class BabyData {
     }
 
     public List NameGenderInMostRecentYear (String name, String gender, String year) throws FileNotFoundException {
-        BabyFile babyFile = new BabyFile(year);
+        BabyFile babyFile = new BabyFile(year, filePath);
         int rank = babyFile.FindRankFromNameGender(name, gender);
         List nameGenderPair = new ArrayList();
-        BabyFile mostRecentBabyFile = new BabyFile(mostRecentYear);
+        BabyFile mostRecentBabyFile = new BabyFile(mostRecentYear, filePath);
         nameGenderPair = mostRecentBabyFile.FindNameGenderFromRank(rank, gender);
         nameGenderPair.add(mostRecentYear);
         return nameGenderPair;

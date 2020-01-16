@@ -8,13 +8,12 @@ public class BabyFile {
     private File yearFile;
     private String yearFileString;
     private int year;
-    private ArrayList<BabyEntry> babyEntries;
-    static final String FILE_PATH = "C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete\\";
+    private ArrayList<BabyEntry> babyEntries = new ArrayList<>();
     static final String FILE_NAME_PREFIX = "yob";
 
-    public BabyFile(String strYear) throws FileNotFoundException {
+    public BabyFile(String strYear, String path) throws FileNotFoundException {
         yearFileString = FILE_NAME_PREFIX + strYear + ".txt";
-        yearFile = new File(FILE_PATH + yearFileString);
+        yearFile = new File(path + "\\" + yearFileString);
         year = Integer.parseInt(strYear);
 
         Scanner input = new Scanner(yearFile);
