@@ -50,31 +50,30 @@ public class BabyData {
     }
 
 
-    public HashMap<Integer, Integer> yearlyNameRank (String name, String gender) {
+    public List<String> yearlyNameRank (String name, String gender) {
 
-        HashMap<Integer, Integer> yearToRank = new HashMap<>();
-        int year;
+        List<String> yearToRank = new ArrayList<>();
 
         for (BabyFile yearData : fileList) {
-            yearToRank.put(yearData.getYear(),yearData.FindRankFromNameGender(name, gender));
+            yearToRank.add(yearData.getYear() + ": " + yearData.FindRankFromNameGender(name, gender));
         }
         return yearToRank;
     }
 
-    public List NameGenderInMostRecentYear (String name, String gender, String year) throws FileNotFoundException {
+    public List<String> NameGenderInMostRecentYear (String name, String gender, String year) throws FileNotFoundException {
         BabyFile babyFile = new BabyFile(year, filePath);
         int rank = babyFile.FindRankFromNameGender(name, gender);
-        List nameGenderPair = new ArrayList();
+        List<String> nameGenderPair;
         BabyFile mostRecentBabyFile = new BabyFile(mostRecentYear, filePath);
         nameGenderPair = mostRecentBabyFile.FindNameGenderFromRank(rank, gender);
         nameGenderPair.add(mostRecentYear);
         return nameGenderPair;
     }
 
-    public HashMap<String, Integer> TopRankedNamesMap (String startYear, String endYear, String gender) throws FileNotFoundException {
+    public HashMap<String, Integer> TopRankedNamesMap (String startYear, String endYear, String gender) {
 
-        HashMap<String, Integer> TopRankedNames = new HashMap<String, Integer>();
-        ArrayList<BabyFile> rangeYearData = new ArrayList<>();
+        HashMap<String, Integer> TopRankedNames = new HashMap<>();
+        ArrayList<BabyFile> rangeYearData;
         rangeYearData = RangeOfYearsData(startYear, endYear);
 
         for (BabyFile yearData : rangeYearData) {
@@ -90,7 +89,8 @@ public class BabyData {
         return TopRankedNames;
     }
 
-    public List MostTopRankedName (HashMap<String, Integer> topRankedNames) {
+    public List<String> MostTopRankedName (String startYear, String endYear, String gender) {
+        HashMap<String, Integer> topRankedNames = TopRankedNamesMap(startYear, endYear, gender);
         int max = 0;
         String mostTopRankedName = "";
 
@@ -98,22 +98,22 @@ public class BabyData {
             int topRankFreq = ((int)numberOneName.getValue());
             String strNumberOneName = (String)numberOneName.getKey();
 
-            if((topRankFreq == max && strNumberOneName.compareTo(mostTopRankedName) < 0)
+            if((topRankFreq == max && mostTopRankedName.compareTo(strNumberOneName) < 0)
                     || topRankFreq > max) {
                 max = topRankFreq;
                 mostTopRankedName = strNumberOneName;
             }
         }
-        List mostTopRankedNameAndFreq = new ArrayList();
+        List<String> mostTopRankedNameAndFreq = new ArrayList<>();
         mostTopRankedNameAndFreq.add(mostTopRankedName);
-        mostTopRankedNameAndFreq.add(max);
+        mostTopRankedNameAndFreq.add(Integer.toString(max));
         return mostTopRankedNameAndFreq;
 
     }
 
-    public HashMap<Character, Integer> RangeFirstLetterCount(String startYear, String endYear, String gender) throws FileNotFoundException {
-        HashMap<Character, Integer> rangeLetterPopularity = new HashMap<Character, Integer>();
-        ArrayList<BabyFile> rangeYearData = new ArrayList<>();
+    public HashMap<Character, Integer> RangeFirstLetterCount(String startYear, String endYear, String gender) {
+        HashMap<Character, Integer> rangeLetterPopularity = new HashMap<>();
+        ArrayList<BabyFile> rangeYearData;
         rangeYearData = RangeOfYearsData(startYear, endYear);
 
         for (BabyFile yearData : rangeYearData) {
@@ -129,7 +129,7 @@ public class BabyData {
                 int firstLetterFreq = ((int) firstLetter.getValue());
                 int temp = rangeLetterPopularity.get(charFirstLetter);
                 temp += firstLetterFreq;
-                rangeLetterPopularity.put(charFirstLetter, firstLetterFreq);
+                rangeLetterPopularity.put(charFirstLetter, temp);
             }
         }
         return rangeLetterPopularity;
@@ -137,11 +137,11 @@ public class BabyData {
     
     public Character MostPopularLetter (HashMap<Character, Integer> firstLetterFreq) {
         int max = 0;
-        Character mostPopularLetter = null;
+        Character mostPopularLetter = 'z';
         for(Map.Entry firstLetter : firstLetterFreq.entrySet()) {
             int freq = (int)firstLetter.getValue();
             Character charFirstLetter = (Character) firstLetter.getKey();
-            if(freq > max) {
+            if(freq > max || (freq == max && charFirstLetter < mostPopularLetter)) {
                 max = freq;
                 mostPopularLetter = charFirstLetter;
             }
@@ -149,8 +149,8 @@ public class BabyData {
         return mostPopularLetter;
     }
 
-    public List MostPopularLetterNames (String startYear, String endYear, String gender) throws FileNotFoundException {
-        HashMap<Character, Integer> firstLetterCountMap = new HashMap<>();
+    public List MostPopularLetterNames (String startYear, String endYear, String gender) {
+        HashMap<Character, Integer> firstLetterCountMap;
         firstLetterCountMap = RangeFirstLetterCount(startYear, endYear, gender);
         Character topLetter = MostPopularLetter(firstLetterCountMap);
         ArrayList<BabyFile> rangeYearData;
@@ -162,7 +162,7 @@ public class BabyData {
             nameSet = yearData.NamesOfCertainLetter(topLetter, gender);
             fullNameSet.addAll(nameSet);
         }
-        List fullNameList = new ArrayList(fullNameSet);
+        List<String> fullNameList = new ArrayList(fullNameSet);
         Collections.sort(fullNameList);
         return fullNameList;
 

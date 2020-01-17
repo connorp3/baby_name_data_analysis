@@ -9,7 +9,7 @@ import java.util.List;
 public class Main {
 
     public static void main (String[] args) throws FileNotFoundException {
-        BabyData babyData = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete");
+        BabyData babyData = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
         Scanner scanner = new Scanner(System.in);
 
         /*System.out.println("Enter a name: ");
