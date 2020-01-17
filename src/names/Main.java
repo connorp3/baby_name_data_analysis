@@ -38,14 +38,14 @@ public class Main {
         System.out.println(nameGenderMostRecentYear.get(2) + ": " + nameGenderMostRecentYear.get(0)
                             + ", " + nameGenderMostRecentYear.get(1));*/
 
-        System.out.println("Enter a start year: ");
+        /*System.out.println("Enter a start year: ");
         String startYear = scanner.nextLine();
 
         System.out.println("Enter an end year: ");
         String endYear = scanner.nextLine();
 
         System.out.println("Enter a gender: ");
-        String gender = scanner.nextLine();
+        String gender = scanner.nextLine();*/
 
         /*HashMap<String, Integer> numberOneNames = new HashMap<String, Integer>();
         numberOneNames = babyData.TopRankedNamesMap(startYear, endYear, gender);
@@ -56,8 +56,8 @@ public class Main {
         System.out.println(mostCommonNumberOneName.get(0));
         System.out.println(mostCommonNumberOneName.get(1));*/
 
-        List topNamesForLetter;
+        /*List topNamesForLetter;
         topNamesForLetter = babyData.MostPopularLetterNames(startYear, endYear, gender);
-        System.out.println(topNamesForLetter);
+        System.out.println(topNamesForLetter);*/
     }
 }
