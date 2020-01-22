@@ -3,10 +3,9 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.io.File;
 
-
-/**
- * Feel free to completely change this code or delete it entirely. 
- */
+/**Represents an entire dataset of baby name data over a range of years. BabyData object consists of
+ * a list of BabyFile objects for each year in dataSet, a string specifying the most recent year in that
+ * dataset, and a string representing the path to the directory that holds the dataset*/
 public class BabyData {
     private ArrayList<BabyFile> fileList;
     private String mostRecentYear;
@@ -14,6 +13,9 @@ public class BabyData {
     static final int YEAR_IN_FILE_NAME_START = 3;
     static final int YEAR_IN_FILE_NAME_END = 7;
 
+    /**Creates the BabyData object by specifying the directory with all files in the dataset
+     * and then creating a list of BabyFile objects and determining the most recent year in the
+     * dataset*/
     public BabyData(String path) throws FileNotFoundException {
         fileList = new ArrayList<>();
         File dataSet = new File(path);
@@ -37,7 +39,7 @@ public class BabyData {
         mostRecentYear = strMaxYear;
 
     }
-
+    /**Given a range of years, outputs a list of BabyFile objects for these years*/
     public ArrayList<BabyFile> RangeOfYearsData (String startYear, String endYear) {
         ArrayList<BabyFile> babyFilesRangeOfYears = new ArrayList<>();
         for (BabyFile yearData : fileList) {
@@ -49,7 +51,8 @@ public class BabyData {
         return babyFilesRangeOfYears;
     }
 
-
+    /**Given a name and gender input, outputs a list of ranks of that name for the specified
+     * gender over every year in the dataset*/
     public List<String> yearlyNameRank (String name, String gender) {
 
         List<String> yearToRank = new ArrayList<>();
@@ -59,7 +62,8 @@ public class BabyData {
         }
         return yearToRank;
     }
-
+    /**Given a name, gender, and year input, outputs the name with that same rank for the specified gender
+     * in the most recent year in the form of a list*/
     public List<String> NameGenderInMostRecentYear (String name, String gender, String year) throws FileNotFoundException {
         BabyFile babyFile = new BabyFile(year, filePath);
         int rank = babyFile.FindRankFromNameGender(name, gender);
@@ -69,7 +73,9 @@ public class BabyData {
         nameGenderPair.add(mostRecentYear);
         return nameGenderPair;
     }
-
+    /**Given a range of years input and a gender, outputs a HashMap of all names ranked number one
+     * for that specified gender in that range of years mapped to the number of times the name
+     * held the number one ranking*/
     public HashMap<String, Integer> TopRankedNamesMap (String startYear, String endYear, String gender) {
 
         HashMap<String, Integer> TopRankedNames = new HashMap<>();
@@ -88,7 +94,8 @@ public class BabyData {
         }
         return TopRankedNames;
     }
-
+    /**Given a range of years and gender input, outputs the name that was ranked number one the most
+     * years for that specified gender*/
     public List<String> MostTopRankedName (String startYear, String endYear, String gender) {
         HashMap<String, Integer> topRankedNames = TopRankedNamesMap(startYear, endYear, gender);
         int max = 0;
@@ -110,7 +117,8 @@ public class BabyData {
         return mostTopRankedNameAndFreq;
 
     }
-
+    /**Given a range of years and gender input, outputs a HashMap that maps each letter of the alphabet to
+     * the number of babies in BabyFile that have a name that starts with that letter over the range of years */
     public HashMap<Character, Integer> RangeFirstLetterCount(String startYear, String endYear, String gender) {
         HashMap<Character, Integer> rangeLetterPopularity = new HashMap<>();
         ArrayList<BabyFile> rangeYearData;
@@ -134,7 +142,9 @@ public class BabyData {
         }
         return rangeLetterPopularity;
     }
-    
+    /**Given a HashMap outputted by RangeFirstLetterCount method as input, outputs the letter
+     * that had the most instances of babies with names starting with that letter over the range
+     * of years*/
     public Character MostPopularLetter (HashMap<Character, Integer> firstLetterFreq) {
         int max = 0;
         Character mostPopularLetter = 'z';
@@ -148,7 +158,9 @@ public class BabyData {
         }
         return mostPopularLetter;
     }
-
+    /**Given a range of years and gender input, outputs a list of all the names that
+     * start with the "most popular" first letter of names, as defined by the MostPopularLetter
+     * method above*/
     public List MostPopularLetterNames (String startYear, String endYear, String gender) {
         HashMap<Character, Integer> firstLetterCountMap;
         firstLetterCountMap = RangeFirstLetterCount(startYear, endYear, gender);
