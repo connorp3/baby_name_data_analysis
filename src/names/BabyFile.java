@@ -46,6 +46,13 @@ public class BabyFile {
         return babyEntriesForGender;
     }
 
+    public List<BabyEntry> sortBabyFileIgnoringGender() {
+        List<BabyEntry> copy = new ArrayList<>(babyEntries.size());
+        copy.addAll(babyEntries);
+        Collections.sort(copy);
+        return copy;
+    }
+
     /**Given an name and gender input, outputs the rank of that name in BabyFile for the specified gender*/
     public int FindRankFromNameGender(String name, String gender) {
 

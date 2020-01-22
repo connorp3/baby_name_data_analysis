@@ -9,8 +9,11 @@ import java.util.List;
 public class Main {
 
     public static void main (String[] args) throws FileNotFoundException {
-        BabyData babyData = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
+        BabyData babyData = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete");
         Scanner scanner = new Scanner(System.in);
+
+        BabyFile babyFile = new BabyFile("2018","C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete");
+        babyFile.sortBabyFileIgnoringGender();
 
         /*System.out.println("Enter a name: ");
         String name = scanner.nextLine();
