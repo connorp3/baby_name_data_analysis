@@ -55,13 +55,25 @@ public class BabyData {
      * gender over every year in the dataset*/
     public List<String> yearlyNameRank (String name, String gender) {
 
+        List<String> yearlyRankList = createYearlyRankList(name, gender, fileList);
+        return yearlyRankList;
+    }
+
+    public List<String> nameRankRangeOfYears (String name, String gender, String startYear, String endYear) {
+
+        List<String> yearlyRankList = createYearlyRankList(name, gender, RangeOfYearsData(startYear, endYear));
+        return yearlyRankList;
+    }
+
+    private List<String> createYearlyRankList(String name, String gender, ArrayList<BabyFile> babyFilesRangeOfYears) {
         List<String> yearToRank = new ArrayList<>();
 
-        for (BabyFile yearData : fileList) {
+        for (BabyFile yearData : babyFilesRangeOfYears) {
             yearToRank.add(yearData.getYear() + ": " + yearData.FindRankFromNameGender(name, gender));
         }
         return yearToRank;
     }
+
     /**Given a name, gender, and year input, outputs the name with that same rank for the specified gender
      * in the most recent year in the form of a list*/
     public List<String> NameGenderInMostRecentYear (String name, String gender, String year) throws FileNotFoundException {

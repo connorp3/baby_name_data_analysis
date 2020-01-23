@@ -1,5 +1,7 @@
 package names;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -62,6 +64,26 @@ class BabyDataTest {
         ArrayList<String> test2 = new ArrayList<String>(
                 Arrays.asList("Emily", "Emma"));
         assertEquals(test2, b.MostPopularLetterNames("2017", "2019", "F"));
+
+    }
+
+
+    @Test
+    void testNameRankRangeOfYears() throws FileNotFoundException {
+        BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
+
+        ArrayList<String> test1 = new ArrayList<String>(
+                Arrays.asList("2017: 3", "2018: 6"));
+        assertEquals(test1, b.nameRankRangeOfYears("Ben","M", "2017", "2018"));
+
+        ArrayList<String> test2 = new ArrayList<String>(
+                Arrays.asList("2017: 3", "2018: 6", "2019: 6"));
+        assertEquals(test2, b.nameRankRangeOfYears("Ben","M", "2017", "2019"));
+
+        ArrayList<String> test3 = new ArrayList<String>(
+                Arrays.asList("2018: 3", "2019: 1"));
+        assertEquals(test3, b.nameRankRangeOfYears("Emily", "F", "2018", "2019"));
+
 
     }
 }
