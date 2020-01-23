@@ -86,4 +86,22 @@ class BabyDataTest {
 
 
     }
+
+    @Test
+    void testDifferenceInRankStartAndEndYear() throws FileNotFoundException {
+        BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
+
+        assertEquals(-3, b.DifferenceInRankStartAndEndYear("Ben", "M", "2018", "2017"));
+        assertEquals(0, b.DifferenceInRankStartAndEndYear("Ben", "M", "2018", "2019"));
+        assertEquals(0, b.DifferenceInRankStartAndEndYear("Emily", "F", "2017", "2019"));
+    }
+
+    @Test
+    void testLargestChangeInRankInRangeOfYears() throws FileNotFoundException {
+        BabyData b1 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2");
+
+        assertEquals("Emily, F", b1.LargestChangeInRankInRangeOfYears("2017", "2019"));
+        assertEquals("Robert, M", b1.LargestChangeInRankInRangeOfYears("2017", "2020"));
+        assertEquals("Adam, F", b1.LargestChangeInRankInRangeOfYears("2017", "2018"));
+    }
 }

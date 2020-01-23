@@ -51,6 +51,15 @@ public class BabyData {
         return babyFilesRangeOfYears;
     }
 
+    private List<String> createYearlyRankList(String name, String gender, ArrayList<BabyFile> babyFilesRangeOfYears) {
+        List<String> yearToRank = new ArrayList<>();
+
+        for (BabyFile yearData : babyFilesRangeOfYears) {
+            yearToRank.add(yearData.getYear() + ": " + yearData.FindRankFromNameGender(name, gender));
+        }
+        return yearToRank;
+    }
+
     /**Given a name and gender input, outputs a list of ranks of that name for the specified
      * gender over every year in the dataset*/
     public List<String> yearlyNameRank (String name, String gender) {
@@ -65,13 +74,40 @@ public class BabyData {
         return yearlyRankList;
     }
 
-    private List<String> createYearlyRankList(String name, String gender, ArrayList<BabyFile> babyFilesRangeOfYears) {
-        List<String> yearToRank = new ArrayList<>();
+    public int DifferenceInRankStartAndEndYear (String name, String gender, String startYear, String endYear) throws FileNotFoundException {
 
-        for (BabyFile yearData : babyFilesRangeOfYears) {
-            yearToRank.add(yearData.getYear() + ": " + yearData.FindRankFromNameGender(name, gender));
+        BabyFile firstYear = new BabyFile(startYear, filePath);
+        BabyFile lastYear = new BabyFile(endYear, filePath);
+        int firstYearRank = firstYear.FindRankFromNameGender(name, gender);
+        int lastYearRank = lastYear.FindRankFromNameGender(name, gender);
+
+        return lastYearRank-firstYearRank;
+    }
+
+    public String LargestChangeInRankInRangeOfYears (String startYear, String endYear) throws FileNotFoundException {
+        BabyFile firstYear = new BabyFile(startYear, filePath);
+        int max = 0;
+        BabyEntry firstBabyEntry = firstYear.getBabyEntries().get(0);
+        String name = firstBabyEntry.getName();
+        String gender = firstBabyEntry.getGender();
+        for(BabyEntry baby : firstYear.getBabyEntries()) {
+            int babyRankChange = DifferenceInRankStartAndEndYear(baby.getName(), baby.getGender(), startYear, endYear);
+            if(Math.abs(babyRankChange) < Math.abs(max)) {
+                continue;
+            }
+            boolean currentRankChangeIsSame = Math.abs(babyRankChange) == Math.abs(max);
+            if(currentRankChangeIsSame && baby.getName().compareTo(name) > 0) {
+                continue;
+            }
+            if(currentRankChangeIsSame && baby.getName().compareTo(name) == 0 && baby.getGender().compareTo(gender) > 0) {
+                continue;
+            }
+            gender = baby.getGender();
+            name = baby.getName();
+            max = babyRankChange;
+
         }
-        return yearToRank;
+        return name + ", " + gender;
     }
 
     /**Given a name, gender, and year input, outputs the name with that same rank for the specified gender

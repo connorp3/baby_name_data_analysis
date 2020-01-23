@@ -1,0 +1,12 @@
+Stephanie,F,2000
+Tina,F,1500
+Adam,F,1000
+Rachel,F,1000
+Georgina,F,1000
+Emily,F,500
+Steve,M,43
+Adam,M,30
+Ben,M,30
+Tim,M,20
+Robert,M,15
+Jeffery,M,10
