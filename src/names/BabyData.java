@@ -12,6 +12,8 @@ public class BabyData {
     private String filePath;
     static final int YEAR_IN_FILE_NAME_START = 3;
     static final int YEAR_IN_FILE_NAME_END = 7;
+    static final String MALE = "M";
+    static final String FEMALE = "F";
 
     /**Creates the BabyData object by specifying the directory with all files in the dataset
      * and then creating a list of BabyFile objects and determining the most recent year in the
@@ -72,6 +74,21 @@ public class BabyData {
 
         List<String> yearlyRankList = createYearlyRankList(name, gender, RangeOfYearsData(startYear, endYear));
         return yearlyRankList;
+    }
+
+    public double AvgNameRankRangeOfYears (String name, String gender, String startYear, String endYear) {
+        double numYears = Integer.parseInt(endYear) - Integer.parseInt(startYear) + 1;
+        double sum = 0.0;
+        for(BabyFile file : RangeOfYearsData(startYear, endYear)) {
+            sum += file.FindRankFromNameGender(name, gender);
+        }
+        return sum/numYears;
+    }
+
+    public String AvgNameRankRangeOfYearsBothGenders (String name, String startYear, String endYear) {
+        double maleAvgRank = AvgNameRankRangeOfYears(name, MALE, startYear, endYear);
+        double femaleAvgRank = AvgNameRankRangeOfYears(name, FEMALE, startYear, endYear);
+        return "Male: " + maleAvgRank + "\n" + "Female: " + femaleAvgRank;
     }
 
     public int DifferenceInRankStartAndEndYear (String name, String gender, String startYear, String endYear) throws FileNotFoundException {

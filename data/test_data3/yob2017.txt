@@ -1,0 +1,12 @@
+Emily,F,2000
+Georgina,F,1500
+Isis,F,1000
+Rachel,F,900
+Stephanie,F,800
+Tina,F,500
+Emily,M,43
+Georgina,M,35
+Isis,M,30
+Rachel,M,20
+Stephanie,M,15
+Tina,M,10

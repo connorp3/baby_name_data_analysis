@@ -104,4 +104,26 @@ class BabyDataTest {
         assertEquals("Robert, M", b1.LargestChangeInRankInRangeOfYears("2017", "2020"));
         assertEquals("Adam, F", b1.LargestChangeInRankInRangeOfYears("2017", "2018"));
     }
+
+    @Test
+    void testAvgNameRankRangeOfYears() throws FileNotFoundException {
+        BabyData b1 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2");
+
+        assertEquals(2.25, b1.AvgNameRankRangeOfYears("Emily", "F", "2017", "2020"));
+        assertEquals(6.0, b1.AvgNameRankRangeOfYears("Jeffery", "M", "2017", "2020"));
+        assertEquals(3.0, b1.AvgNameRankRangeOfYears("Adam", "M", "2019", "2020"));
+    }
+
+    @Test
+    void testAvgNameRankRangeOfYearsBothGenders() throws FileNotFoundException {
+        BabyData b2 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data3");
+
+        double expectedMale = 10.0/3.0;
+        assertEquals("Male: " + expectedMale + "\n" + "Female: 1.0", b2.AvgNameRankRangeOfYearsBothGenders("Emily", "2017", "2019"));
+        double expectedFemale = 14.0/3.0;
+        assertEquals("Male: 3.0" + "\n" + "Female: " + expectedFemale, b2.AvgNameRankRangeOfYearsBothGenders("Tina", "2017", "2019"));
+        assertEquals("Male: 6.0\nFemale: 5.0", b2.AvgNameRankRangeOfYearsBothGenders("Georgina", "2019", "2019"));
+
+    }
+
 }
