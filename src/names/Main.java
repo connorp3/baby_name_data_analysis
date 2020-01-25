@@ -1,19 +1,24 @@
 package names;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.List;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Main {
 
     public static void main (String[] args) throws FileNotFoundException {
-        BabyData babyData = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete");
+        /*BabyData babyData = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete");
         Scanner scanner = new Scanner(System.in);
 
         BabyFile babyFile = new BabyFile("2018","C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete");
         babyFile.sortBabyFileIgnoringGender();
+*/
+        /*BabyData b2 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2");
+
+        ArrayList<String> test1 = new ArrayList<String>(
+                Arrays.asList("Adam", "3"));
+        System.out.println(b2.MostFreqNameAtRankingBothGenders("2017", "2020", "2"));*/
 
         /*System.out.println("Enter a name: ");
         String name = scanner.nextLine();

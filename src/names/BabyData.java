@@ -54,14 +54,26 @@ public class BabyData {
     }
 
     private List<String> createYearlyRankList(String name, String gender, ArrayList<BabyFile> babyFilesRangeOfYears) {
-        List<String> yearToRank = new ArrayList<>();
+        List<String> yearlyRank = new ArrayList<>();
 
         for (BabyFile yearData : babyFilesRangeOfYears) {
-            yearToRank.add(yearData.getYear() + ": " + yearData.FindRankFromNameGender(name, gender));
+            yearlyRank.add(yearData.getYear() + ": " + yearData.FindRankFromNameGender(name, gender));
         }
-        return yearToRank;
+        return yearlyRank;
     }
 
+    public List<String> FindNameFromRankForRangeOfYears(String rank, String gender, String startYear, String endYear) {
+        List<BabyFile> babyFilesRangeOfYears = new ArrayList<>(RangeOfYearsData(startYear, endYear));
+        List<String> yearlyName = new ArrayList<>();
+
+        for (BabyFile yearData : babyFilesRangeOfYears) {
+            List<String> nameAndGender;
+            nameAndGender = yearData.FindNameGenderFromRank(Integer.parseInt(rank), gender);
+            String name = nameAndGender.get(0);
+            yearlyName.add(yearData.getYear() + ": " + name);
+        }
+        return yearlyName;
+    }
     /**Given a name and gender input, outputs a list of ranks of that name for the specified
      * gender over every year in the dataset*/
     public List<String> yearlyNameRank (String name, String gender) {
@@ -70,7 +82,7 @@ public class BabyData {
         return yearlyRankList;
     }
 
-    public List<String> nameRankRangeOfYears (String name, String gender, String startYear, String endYear) {
+    public List<String> FindRankFromNameForRangeOfYears (String name, String gender, String startYear, String endYear) {
 
         List<String> yearlyRankList = createYearlyRankList(name, gender, RangeOfYearsData(startYear, endYear));
         return yearlyRankList;
@@ -141,45 +153,65 @@ public class BabyData {
     /**Given a range of years input and a gender, outputs a HashMap of all names ranked number one
      * for that specified gender in that range of years mapped to the number of times the name
      * held the number one ranking*/
-    public HashMap<String, Integer> TopRankedNamesMap (String startYear, String endYear, String gender) {
+    public HashMap<String, Integer> NameFreqAtRankingMap (String startYear, String endYear, String gender, String rank) {
 
-        HashMap<String, Integer> TopRankedNames = new HashMap<>();
+        HashMap<String, Integer> namesAtRanking = new HashMap<>();
         ArrayList<BabyFile> rangeYearData;
         rangeYearData = RangeOfYearsData(startYear, endYear);
 
         for (BabyFile yearData : rangeYearData) {
 
-            if(!TopRankedNames.containsKey(yearData.MostPopularNameForGender(gender))) {
-                TopRankedNames.put(yearData.MostPopularNameForGender(gender), 0);
+            if(!namesAtRanking.containsKey(yearData.FindNameFromRank(gender, rank))) {
+                namesAtRanking.put(yearData.FindNameFromRank(gender, rank), 0);
             }
-            int temp = TopRankedNames.get(yearData.MostPopularNameForGender(gender));
+            int temp = namesAtRanking.get(yearData.FindNameFromRank(gender, rank));
             temp++;
-            TopRankedNames.put(yearData.MostPopularNameForGender(gender), temp);
+            namesAtRanking.put(yearData.FindNameFromRank(gender, rank), temp);
 
         }
-        return TopRankedNames;
+        return namesAtRanking;
     }
     /**Given a range of years and gender input, outputs the name that was ranked number one the most
      * years for that specified gender*/
-    public List<String> MostTopRankedName (String startYear, String endYear, String gender) {
-        HashMap<String, Integer> topRankedNames = TopRankedNamesMap(startYear, endYear, gender);
+    public List<String> MostFreqNameAtRanking (String startYear, String endYear, String gender, String rank) {
+        HashMap<String, Integer> nameFreqAtRanking = NameFreqAtRankingMap(startYear, endYear, gender, rank);
         int max = 0;
-        String mostTopRankedName = "";
+        String mostFreqNameAtRank = "";
 
-        for(Map.Entry numberOneName : topRankedNames.entrySet()) {
-            int topRankFreq = ((int)numberOneName.getValue());
-            String strNumberOneName = (String)numberOneName.getKey();
+        for(Map.Entry nameAtRankingKey : nameFreqAtRanking.entrySet()) {
+            int rankFreq = ((int)nameAtRankingKey.getValue());
+            String nameAtRanking = (String)nameAtRankingKey.getKey();
 
-            if((topRankFreq == max && mostTopRankedName.compareTo(strNumberOneName) < 0)
-                    || topRankFreq > max) {
-                max = topRankFreq;
-                mostTopRankedName = strNumberOneName;
+            if((rankFreq == max && mostFreqNameAtRank.compareTo(nameAtRanking) < 0)
+                    || rankFreq > max) {
+                max = rankFreq;
+                mostFreqNameAtRank = nameAtRanking;
             }
         }
-        List<String> mostTopRankedNameAndFreq = new ArrayList<>();
-        mostTopRankedNameAndFreq.add(mostTopRankedName);
-        mostTopRankedNameAndFreq.add(Integer.toString(max));
-        return mostTopRankedNameAndFreq;
+        List<String> mostFreqNameAtRanking = new ArrayList<>();
+        mostFreqNameAtRanking.add(mostFreqNameAtRank);
+        mostFreqNameAtRanking.add(Integer.toString(max));
+        return mostFreqNameAtRanking;
+
+    }
+
+    public List<String> MostFreqNameAtRankingBothGenders (String startYear, String endYear, String rank) {
+        List<String> maleMostFreqNameAtRank = MostFreqNameAtRanking(startYear, endYear, MALE, rank);
+        List<String> femaleMostFreqNameAtRank = MostFreqNameAtRanking(startYear, endYear, FEMALE, rank);
+
+        Integer maleFreq = Integer.parseInt(maleMostFreqNameAtRank.get(1));
+        String maleName = maleMostFreqNameAtRank.get(0);
+
+        Integer femaleFreq = Integer.parseInt(femaleMostFreqNameAtRank.get(1));
+        String femaleName = femaleMostFreqNameAtRank.get(0);
+
+        if(maleFreq > femaleFreq || (maleFreq == femaleFreq && maleName.compareTo(femaleName) < 0)) {
+            return maleMostFreqNameAtRank;
+        }
+
+        return femaleMostFreqNameAtRank;
+
+
 
     }
     /**Given a range of years and gender input, outputs a HashMap that maps each letter of the alphabet to

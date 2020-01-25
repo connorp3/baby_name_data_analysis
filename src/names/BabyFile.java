@@ -91,10 +91,10 @@ public class BabyFile {
 
     /**Given a gender input, outputs the name of that gender with the highest nameCount,
     * breaking ties alphabetically*/
-    public String MostPopularNameForGender(String gender) {
+    public String FindNameFromRank(String gender, String rank) {
 
         ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
-        BabyEntry mostPopularBabyEntry = babyEntriesList.get(0);
+        BabyEntry mostPopularBabyEntry = babyEntriesList.get(Integer.parseInt(rank) - 1);
 
         return mostPopularBabyEntry.getName();
     }

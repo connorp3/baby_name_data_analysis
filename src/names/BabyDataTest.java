@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,16 +42,30 @@ class BabyDataTest {
     }
 
     @org.junit.jupiter.api.Test
-    void testMostTopRankedName() throws FileNotFoundException {
+    void testMostFreqNameAtRanking() throws FileNotFoundException {
         BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
 
         ArrayList<String> test1 = new ArrayList<String>(
                 Arrays.asList("Emily", "2"));
-        assertEquals(test1, b.MostTopRankedName("2017", "2019", "F"));
+        assertEquals(test1, b.MostFreqNameAtRanking("2017", "2019", "F", "1"));
 
         ArrayList<String> test2 = new ArrayList<String>(
                 Arrays.asList("Emma", "1"));
-        assertEquals(test2, b.MostTopRankedName("2017", "2018", "F"));
+        assertEquals(test2, b.MostFreqNameAtRanking("2017", "2018", "F", "1"));
+    }
+
+    @Test
+    void testMostFreqNameAtRankingBothGenders() throws FileNotFoundException {
+        BabyData b2 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2");
+
+        ArrayList<String> test1 = new ArrayList<String>(
+                Arrays.asList("Adam", "3"));
+        assertEquals(test1, b2.MostFreqNameAtRankingBothGenders("2017", "2020", "2"));
+
+        ArrayList<String> test2 = new ArrayList<String>(
+                Arrays.asList("Rachel", "4"));
+        assertEquals(test2, b2.MostFreqNameAtRankingBothGenders("2017", "2020", "4"));
+
     }
 
     @org.junit.jupiter.api.Test
@@ -69,20 +84,20 @@ class BabyDataTest {
 
 
     @Test
-    void testNameRankRangeOfYears() throws FileNotFoundException {
+    void testFindRankFromNameForRangeOfYears() throws FileNotFoundException {
         BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
 
         ArrayList<String> test1 = new ArrayList<String>(
                 Arrays.asList("2017: 3", "2018: 6"));
-        assertEquals(test1, b.nameRankRangeOfYears("Ben","M", "2017", "2018"));
+        assertEquals(test1, b.FindRankFromNameForRangeOfYears("Ben","M", "2017", "2018"));
 
         ArrayList<String> test2 = new ArrayList<String>(
                 Arrays.asList("2017: 3", "2018: 6", "2019: 6"));
-        assertEquals(test2, b.nameRankRangeOfYears("Ben","M", "2017", "2019"));
+        assertEquals(test2, b.FindRankFromNameForRangeOfYears("Ben","M", "2017", "2019"));
 
         ArrayList<String> test3 = new ArrayList<String>(
                 Arrays.asList("2018: 3", "2019: 1"));
-        assertEquals(test3, b.nameRankRangeOfYears("Emily", "F", "2018", "2019"));
+        assertEquals(test3, b.FindRankFromNameForRangeOfYears("Emily", "F", "2018", "2019"));
 
 
     }
@@ -123,6 +138,23 @@ class BabyDataTest {
         double expectedFemale = 14.0/3.0;
         assertEquals("Male: 3.0" + "\n" + "Female: " + expectedFemale, b2.AvgNameRankRangeOfYearsBothGenders("Tina", "2017", "2019"));
         assertEquals("Male: 6.0\nFemale: 5.0", b2.AvgNameRankRangeOfYearsBothGenders("Georgina", "2019", "2019"));
+
+    }
+
+    @Test
+    void testFindNameFromRankForRangeOfYears() throws FileNotFoundException {
+        BabyData b1 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2");
+
+        List<String> test1 = new ArrayList<>(Arrays.asList("2018: Emily", "2019: Stephanie", "2020: Emily"));
+        assertEquals(test1, b1.FindNameFromRankForRangeOfYears("1", "F", "2018", "2020"));
+
+        List<String> test2 = new ArrayList<>(Arrays.asList("2019: Robert", "2020: Ben"));
+        assertEquals(test2, b1.FindNameFromRankForRangeOfYears("5", "M", "2019", "2020"));
+
+        List<String> test3 = new ArrayList<>(Arrays.asList("2017: Adam", "2018: Adam", "2019: Adam", "2020: Adam"));
+        assertEquals(test3, b1.FindNameFromRankForRangeOfYears("3", "F", "2017", "2020"));
+
+
 
     }
 
