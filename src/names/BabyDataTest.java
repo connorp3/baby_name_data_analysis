@@ -50,7 +50,7 @@ class BabyDataTest {
         assertEquals(test1, b.MostFreqNameAtRanking("2017", "2019", "F", "1"));
 
         ArrayList<String> test2 = new ArrayList<String>(
-                Arrays.asList("Emma", "1"));
+                Arrays.asList("Emily", "1"));
         assertEquals(test2, b.MostFreqNameAtRanking("2017", "2018", "F", "1"));
     }
 
@@ -65,6 +65,14 @@ class BabyDataTest {
         ArrayList<String> test2 = new ArrayList<String>(
                 Arrays.asList("Rachel", "4"));
         assertEquals(test2, b2.MostFreqNameAtRankingBothGenders("2017", "2020", "4"));
+
+        ArrayList<String> test3 = new ArrayList<String>(
+                Arrays.asList("Steve", "3"));
+        assertEquals(test3, b2.MostFreqNameAtRankingBothGenders("2017", "2019",  "1"));
+
+        ArrayList<String> test4 = new ArrayList<String>(
+                Arrays.asList("Emily", "1"));
+        assertEquals(test4, b2.MostFreqNameAtRankingBothGenders("2019", "2020", "1"));
 
     }
 

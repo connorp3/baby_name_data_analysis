@@ -182,7 +182,7 @@ public class BabyData {
             int rankFreq = ((int)nameAtRankingKey.getValue());
             String nameAtRanking = (String)nameAtRankingKey.getKey();
 
-            if((rankFreq == max && mostFreqNameAtRank.compareTo(nameAtRanking) < 0)
+            if((rankFreq == max && nameAtRanking.compareTo(mostFreqNameAtRank) < 0)
                     || rankFreq > max) {
                 max = rankFreq;
                 mostFreqNameAtRank = nameAtRanking;
