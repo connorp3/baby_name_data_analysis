@@ -1,7 +1,6 @@
 package names;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
-import java.io.File;
 
 /**Represents an entire dataset of baby name data over a range of years. BabyData object consists of
  * a list of BabyFile objects for each year in dataSet, a string specifying the most recent year in that
@@ -14,32 +13,47 @@ public class BabyData {
     static final int YEAR_IN_FILE_NAME_END = 7;
     static final String MALE = "M";
     static final String FEMALE = "F";
+    static final String URL_DATASET = "https://www2.cs.duke.edu/courses/spring20/compsci307d/assign/01_data/data/ssa_complete/";
 
     /**Creates the BabyData object by specifying the directory with all files in the dataset
      * and then creating a list of BabyFile objects and determining the most recent year in the
      * dataset*/
-    public BabyData(String path) throws FileNotFoundException {
+    public BabyData(String path) throws IOException {
         fileList = new ArrayList<>();
-        File dataSet = new File(path);
         filePath = path;
-
-        String[] files = dataSet.list();
         int maxYear = 0;
-        String strMaxYear = "";
+        String strMaxYear = "2020";
 
-        for (String file : files) {
-            if(!file.equals("README.txt")) {
-                String strYear = file.substring(YEAR_IN_FILE_NAME_START, YEAR_IN_FILE_NAME_END);
-
+        if(path.equals(URL_DATASET)) {
+            URLDataSet dataSet = new URLDataSet(URL_DATASET);
+            ArrayList<String> yearsOfData = new ArrayList<>(dataSet.getFileNames());
+            for(String yearFile : yearsOfData) {
+                String strYear = yearFile.substring(YEAR_IN_FILE_NAME_START, YEAR_IN_FILE_NAME_END);
                 int year = Integer.parseInt(strYear);
-                if(year>= maxYear) strMaxYear = strYear;
+                if (year >= maxYear) strMaxYear = strYear;
 
-                BabyFile babyFile = new BabyFile(strYear, filePath);
+                BabyFile babyFile = new BabyFile(strYear, URL_DATASET);
                 fileList.add(babyFile);
             }
         }
-        mostRecentYear = strMaxYear;
+        else {
+            File dataSet = new File(path);
+            String[] files = dataSet.list();
 
+
+            for (String file : files) {
+                if (!file.equals("README.txt")) {
+                    String strYear = file.substring(YEAR_IN_FILE_NAME_START, YEAR_IN_FILE_NAME_END);
+
+                    int year = Integer.parseInt(strYear);
+                    if (year >= maxYear) strMaxYear = strYear;
+
+                    BabyFile babyFile = new BabyFile(strYear, filePath);
+                    fileList.add(babyFile);
+                }
+            }
+        }
+        mostRecentYear = strMaxYear;
     }
     /**Given a range of years, outputs a list of BabyFile objects for these years*/
     public ArrayList<BabyFile> RangeOfYearsData (String startYear, String endYear) {
@@ -103,7 +117,7 @@ public class BabyData {
         return "Male: " + maleAvgRank + "\n" + "Female: " + femaleAvgRank;
     }
 
-    public int DifferenceInRankStartAndEndYear (String name, String gender, String startYear, String endYear) throws FileNotFoundException {
+    public int DifferenceInRankStartAndEndYear (String name, String gender, String startYear, String endYear) throws IOException {
 
         BabyFile firstYear = new BabyFile(startYear, filePath);
         BabyFile lastYear = new BabyFile(endYear, filePath);
@@ -113,7 +127,7 @@ public class BabyData {
         return lastYearRank-firstYearRank;
     }
 
-    public String LargestChangeInRankInRangeOfYears (String startYear, String endYear) throws FileNotFoundException {
+    public String LargestChangeInRankInRangeOfYears (String startYear, String endYear) throws IOException {
         BabyFile firstYear = new BabyFile(startYear, filePath);
         int max = 0;
         BabyEntry firstBabyEntry = firstYear.getBabyEntries().get(0);
@@ -141,7 +155,7 @@ public class BabyData {
 
     /**Given a name, gender, and year input, outputs the name with that same rank for the specified gender
      * in the most recent year in the form of a list*/
-    public List<String> NameGenderInMostRecentYear (String name, String gender, String year) throws FileNotFoundException {
+    public List<String> NameGenderInMostRecentYear (String name, String gender, String year) throws IOException {
         BabyFile babyFile = new BabyFile(year, filePath);
         int rank = babyFile.FindRankFromNameGender(name, gender);
         List<String> nameGenderPair;
@@ -211,8 +225,22 @@ public class BabyData {
 
         return femaleMostFreqNameAtRank;
 
+    }
 
-
+    public List<String> MostFreqNameAtRankingBothGendersNameMeaning (String startYear, String endYear, String rank) throws FileNotFoundException {
+        NameMeaningsFile nameMeanings = new NameMeaningsFile();
+        List<String> mostTopRankedNameAndFreq = MostFreqNameAtRankingBothGenders(startYear, endYear, rank);
+        String mostTopRankedName = mostTopRankedNameAndFreq.get(0);
+        for(List<String> name : nameMeanings.getNameMeanings()) {
+            String nameInMeaningsFile = name.get(0);
+            if(nameInMeaningsFile.equals(mostTopRankedName.toUpperCase())) {
+                String gender = name.get(1).toUpperCase();
+                String meaning = name.get(2);
+                mostTopRankedNameAndFreq.add(gender);
+                mostTopRankedNameAndFreq.add(meaning);
+            }
+        }
+        return mostTopRankedNameAndFreq;
     }
     /**Given a range of years and gender input, outputs a HashMap that maps each letter of the alphabet to
      * the number of babies in BabyFile that have a name that starts with that letter over the range of years */

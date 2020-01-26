@@ -1,7 +1,8 @@
 package names;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -13,17 +14,34 @@ public class BabyFile {
     private int year;
     private ArrayList<BabyEntry> babyEntries = new ArrayList<>();
     static final String FILE_NAME_PREFIX = "yob";
+    static final int YEAR_IN_FILE_NAME_START = 3;
+    static final int YEAR_IN_FILE_NAME_END = 7;
+    static final String URL_DATASET = "https://www2.cs.duke.edu/courses/spring20/compsci307d/assign/01_data/data/ssa_complete/";
     /**Creates the BabyFile object by scanning the file for a specified year and creating
      * BabyEntries for each line*/
-    public BabyFile(String strYear, String path) throws FileNotFoundException {
+    public BabyFile(String strYear, String path) throws IOException {
         String yearFileString = FILE_NAME_PREFIX + strYear + ".txt";
-        File yearFile = new File(path + "\\" + yearFileString);
-        year = Integer.parseInt(strYear);
+        if(path.equals(URL_DATASET)) {
+            year = Integer.parseInt(strYear);
+            java.net.URL babyFileURL = new URL(path + yearFileString);
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(babyFileURL.openStream()));
 
-        Scanner input = new Scanner(yearFile);
-        while (input.hasNextLine()) {
-            BabyEntry babyEntry = new BabyEntry(input.nextLine());
-            babyEntries.add(babyEntry);
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                BabyEntry babyEntry = new BabyEntry(inputLine);
+                babyEntries.add(babyEntry);
+            }
+        }
+        else {
+            File yearFile = new File(path + "\\" + yearFileString);
+            year = Integer.parseInt(strYear);
+
+            Scanner input = new Scanner(yearFile);
+            while (input.hasNextLine()) {
+                BabyEntry babyEntry = new BabyEntry(input.nextLine());
+                babyEntries.add(babyEntry);
+            }
         }
     }
 
