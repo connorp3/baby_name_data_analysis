@@ -74,6 +74,12 @@ None
 
 
 ### Notes/Assumptions
+Changing Data Source:
+
+You can change the data source by creating new BabyData objects and specifying the new 
+path for the data source as a parameter. You must also pass whether the file is a Directory
+(true) or a URL (false) as a parameter.
+
 Data Sources (At Least 3):
 
 I assumed that my test_data folders were adequate as one of the  other data sources that could be used.
