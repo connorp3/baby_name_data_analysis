@@ -14,10 +14,9 @@ public class BabyFile {
     private int year;
     private ArrayList<BabyEntry> babyEntries = new ArrayList<>();
     static final String FILE_NAME_PREFIX = "yob";
-    static final String URL_DATASET = "https://www2.cs.duke.edu/courses/spring20/compsci307d/assign/01_data/data/ssa_complete/";
 
-    /**Creates the BabyFile object by scanning the file for a specified year and creating
-     * BabyEntries for each line*/
+    /**Creates the BabyFile object. First determines if the file Path is a URL or not, and processes the filePath for a specified year and creating
+     * BabyEntries for each line. Different processes are used to do so depending on whether the file Path is a URL or a folder in data.*/
     public BabyFile(String strYear, String path, boolean isFile) throws IOException {
         String yearFileString = FILE_NAME_PREFIX + strYear + ".txt";
         if(!isFile) {
@@ -55,7 +54,7 @@ public class BabyFile {
     public ArrayList<BabyEntry> getBabyEntries() {
         return babyEntries;
     }
-
+/**Determines if the specified URL path to a year file is valid and exits the program if it isn't*/
     public void isYearDataURLValid(String dataSetURL) throws IOException {
         try {
             new URL(dataSetURL).toURI();
@@ -64,16 +63,25 @@ public class BabyFile {
             System.exit(0);
         }
     }
-
+/**Determines if the specified file path to a year file is valid and exits the program if it isn't*/
     private void doesYearDataExist(File dataSet) {
         if (!dataSet.exists()) {
             System.out.println("ERROR: At least one year inputted is not in the specified dataset");
             System.exit(0);
         }
     }
+/**Determines if a name is present in a year file. If the rank of the given name for a gender exceeds the number of BabyEntries for that
+ * gender, the name does not exist.*/
+    private void doesNameExist(int rank, int numBabyEntries) {
+        if (rank > numBabyEntries) {
+            System.out.println("ERROR: The inputted name does not exist for the specified gender in at least one of the specified year files");
+            System.exit(0);
+        }
+    }
 
     /**Creates a list of only male or female BabyEntry objects from a BabyFile*/
     public ArrayList<BabyEntry> getBabyEntriesForGender(String gender) {
+
         ArrayList<BabyEntry> babyEntriesForGender = new ArrayList<>();
         for (BabyEntry baby : getBabyEntries()) {
             if (baby.getGender().equals(gender)) {
@@ -83,12 +91,6 @@ public class BabyFile {
         return babyEntriesForGender;
     }
 
-    public List<BabyEntry> sortBabyFileIgnoringGender() {
-        List<BabyEntry> copy = new ArrayList<>(babyEntries.size());
-        copy.addAll(babyEntries);
-        Collections.sort(copy);
-        return copy;
-    }
 
     /**Given an name and gender input, outputs the rank of that name in BabyFile for the specified gender*/
     public int FindRankFromNameGender(String name, String gender) {
@@ -97,18 +99,18 @@ public class BabyFile {
         ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
 
         for(BabyEntry baby : babyEntriesList) {
-            if(rank > babyEntriesList.size()) {
-                System.out.println("ERROR: The inputted name does not exist for the specified gender in at least one of the specified year files");
-                System.exit(0);
-            }
+            /**Outputs an error message and exits program if name specified is not in the given data file*/
             if (!baby.getName().equals(name)) {
                 rank++;
+                doesNameExist(rank, babyEntriesList.size());
                 continue;
             }
             break;
         }
         return rank;
     }
+
+
     /**Given a ranking and gender input, outputs the name from BabyFile that has that ranking within the specified
     * gender*/
     public List<String> FindNameGenderFromRank(int rank, String gender) {
@@ -172,7 +174,4 @@ public class BabyFile {
         }
         return nameSet;
     }
-
-
-
 }

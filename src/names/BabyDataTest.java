@@ -146,6 +146,16 @@ class BabyDataTest {
         assertEquals("Male: 6.0\nFemale: 5.0", b2.AvgNameRankRangeOfYearsBothGenders("Georgina", "2019", "2019"));
 
     }
+    @Test
+
+    void testAvgNameRankRangeOfYearsBothGendersMostRecentYears() throws IOException {
+
+        double expectedMale = 10.0/3.0;
+        assertEquals("Male: " + expectedMale + "\n" + "Female: 1.0", b2.AvgNameRankRangeOfYearsBothGendersMostRecentYears("Emily", 3));
+        double expectedFemale = 14.0/3.0;
+        assertEquals("Male: 3.0" + "\n" + "Female: " + expectedFemale, b2.AvgNameRankRangeOfYearsBothGendersMostRecentYears("Tina", 3));
+        assertEquals("Male: 6.0\nFemale: 5.0", b2.AvgNameRankRangeOfYearsBothGendersMostRecentYears("Georgina", 1));
+    }
 
     @Test
     void testFindNameFromRankForRangeOfYears() throws IOException {
@@ -159,8 +169,11 @@ class BabyDataTest {
         List<String> test3 = new ArrayList<>(Arrays.asList("2017: Adam", "2018: Adam", "2019: Adam", "2020: Adam"));
         assertEquals(test3, b1.FindNameFromRankForRangeOfYears("3", "F", "2017", "2020"));
 
+    }
 
-
+    @Test
+    void testGenderInputInvalid() {
+        assertEquals(null, b.yearlyNameRank("Ben","X"));
     }
 
 }

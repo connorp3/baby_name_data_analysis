@@ -10,24 +10,24 @@ public class BabyData {
     private ArrayList<BabyFile> fileList;
     private String mostRecentYear;
     private String filePath;
-    private boolean isDataSetAFile;
+    private boolean isDataSetADirectory;
     static final int YEAR_IN_FILE_NAME_START = 3;
     static final int YEAR_IN_FILE_NAME_END = 7;
     static final String MALE = "M";
     static final String FEMALE = "F";
-    static final String URL_DATASET = "https://www2.cs.duke.edu/courses/spring20/compsci307d/assign/01_data/data/ssa_complete/";
 
-    /**Creates the BabyData object by specifying the directory with all files in the dataset
+    /**Creates the BabyData object by specifying the path with all files in the dataset
      * and then creating a list of BabyFile objects and determining the most recent year in the
-     * dataset*/
-    public BabyData(String path, boolean isFile) throws IOException, URISyntaxException {
-        isDataSetAFile = isFile;
+     * dataset. The constructor uses different logic to process a URL path versus a directory path,
+     * and the difference in path is passed as a parameter.*/
+    public BabyData(String path, boolean isDirectory) throws IOException, URISyntaxException {
+        isDataSetADirectory = isDirectory;
         fileList = new ArrayList<>();
         filePath = path;
         int maxYear = 0;
         String strMaxYear = "2020";
 
-        if(!isDataSetAFile) {
+        if(!isDataSetADirectory) {
             URLDataSet dataSet = new URLDataSet(path);
             ArrayList<String> yearsOfData = new ArrayList<>(dataSet.getFileNames());
             for(String yearFile : yearsOfData) {
@@ -35,11 +35,11 @@ public class BabyData {
                 int year = Integer.parseInt(strYear);
                 if (year >= maxYear) strMaxYear = strYear;
 
-                BabyFile babyFile = new BabyFile(strYear, filePath, isDataSetAFile);
+                BabyFile babyFile = new BabyFile(strYear, filePath, isDataSetADirectory);
                 fileList.add(babyFile);
             }
         }
-        else if(isDataSetAFile) {
+        else if(isDataSetADirectory) {
             File dataSet = new File(path);
             doesDataSetExist(dataSet);
             String[] files = dataSet.list();
@@ -53,26 +53,30 @@ public class BabyData {
                     int year = Integer.parseInt(strYear);
                     if (year >= maxYear) strMaxYear = strYear;
 
-                    BabyFile babyFile = new BabyFile(strYear, filePath, isDataSetAFile);
+                    BabyFile babyFile = new BabyFile(strYear, filePath, isDataSetADirectory);
                     fileList.add(babyFile);
                 }
             }
         }
         mostRecentYear = strMaxYear;
     }
-
+    /**Determines if the dataset specified by a path is empty and prints error message and exits program if so*/
     private void isDataSetEmpty(String[] files) {
         if (files.length == 0) {
             System.out.println("ERROR: Data Source is empty");
             System.exit(0);
         }
     }
-
+    /**Determines if the dataset specified by a path exists and prints error message and exits program if so*/
     private void doesDataSetExist(File dataSet) {
         if (!dataSet.exists()) {
             System.out.println("ERROR: Data Source does not exist");
             System.exit(0);
         }
+    }
+    /**Determines if a gender string is valid*/
+    public boolean genderInputValid(String gender) {
+        return gender.equals("M") || gender.equals("F");
     }
 
     /**Given a range of years, outputs a list of BabyFile objects for these years*/
@@ -87,7 +91,7 @@ public class BabyData {
                 babyFilesRangeOfYears.add(yearData);
             }
         }
-        /**Outputs an error message if a range of years specified is not in the completely in the dataset*/
+        /**Outputs an error message if a range of years specified is not completely in the dataset*/
         if(babyFilesRangeOfYears.size() < rangeLength) {
             System.out.println("ERROR: At least one year in range is not represented in the dataset");
             System.exit(0);
@@ -95,7 +99,7 @@ public class BabyData {
 
         return babyFilesRangeOfYears;
     }
-
+/**Creates a list of the yearly rankings of an inputted name/gender pair when given an ArrayList of babyFiles for a range of years*/
     private List<String> createYearlyRankList(String name, String gender, ArrayList<BabyFile> babyFilesRangeOfYears) {
         List<String> yearlyRank = new ArrayList<>();
 
@@ -104,8 +108,12 @@ public class BabyData {
         }
         return yearlyRank;
     }
-
+    /**Outputs a list of names ranked at an inputted ranking for a range of years*/
     public List<String> FindNameFromRankForRangeOfYears(String rank, String gender, String startYear, String endYear) {
+        if(!genderInputValid(gender)) {
+            return null;
+        }
+
         List<BabyFile> babyFilesRangeOfYears = new ArrayList<>(RangeOfYearsData(startYear, endYear));
         List<String> yearlyName = new ArrayList<>();
 
@@ -120,18 +128,26 @@ public class BabyData {
     /**Given a name and gender input, outputs a list of ranks of that name for the specified
      * gender over every year in the dataset*/
     public List<String> yearlyNameRank (String name, String gender) {
-
+        if(!genderInputValid(gender)) {
+            return null;
+        }
         List<String> yearlyRankList = createYearlyRankList(name, gender, fileList);
         return yearlyRankList;
     }
-
+    /**Given a name and gender input, outputs a list of ranks of that name for the specified
+     * gender over range of years in the dataset*/
     public List<String> FindRankFromNameForRangeOfYears (String name, String gender, String startYear, String endYear) {
-
+        if(!genderInputValid(gender)) {
+            return null;
+        }
         List<String> yearlyRankList = createYearlyRankList(name, gender, RangeOfYearsData(startYear, endYear));
         return yearlyRankList;
     }
-
+    /**Given a name and gender, outputs the average ranking of that name/gender pair for a range of years*/
     public double AvgNameRankRangeOfYears (String name, String gender, String startYear, String endYear) {
+        if(!genderInputValid(gender)) {
+            return 0.0;
+        }
         double numYears = Integer.parseInt(endYear) - Integer.parseInt(startYear) + 1;
         double sum = 0.0;
         for(BabyFile file : RangeOfYearsData(startYear, endYear)) {
@@ -139,25 +155,36 @@ public class BabyData {
         }
         return sum/numYears;
     }
-
+/**Given a name, outputs the average male and average female ranking for that name over a range of years*/
     public String AvgNameRankRangeOfYearsBothGenders (String name, String startYear, String endYear) {
         double maleAvgRank = AvgNameRankRangeOfYears(name, MALE, startYear, endYear);
         double femaleAvgRank = AvgNameRankRangeOfYears(name, FEMALE, startYear, endYear);
         return "Male: " + maleAvgRank + "\n" + "Female: " + femaleAvgRank;
     }
-
+/**Given a name, outputs the average male and average female ranking for that name over the most recent specified number of years*/
+    public String AvgNameRankRangeOfYearsBothGendersMostRecentYears(String name, int numYears) {
+        String endYear = mostRecentYear;
+        int intStartYear = Integer.parseInt(mostRecentYear) - numYears + 1;
+        String startYear = Integer.toString(intStartYear);
+        return(AvgNameRankRangeOfYearsBothGenders(name, startYear, endYear));
+    }
+/**Given a name and gender, finds the difference ranking for that name/gender pair for a specified startYear and endYear*/
     public int DifferenceInRankStartAndEndYear (String name, String gender, String startYear, String endYear) throws IOException {
+        if(!genderInputValid(gender)) {
+            return 0;
+        }
 
-        BabyFile firstYear = new BabyFile(startYear, filePath, isDataSetAFile);
-        BabyFile lastYear = new BabyFile(endYear, filePath, isDataSetAFile);
+        BabyFile firstYear = new BabyFile(startYear, filePath, isDataSetADirectory);
+        BabyFile lastYear = new BabyFile(endYear, filePath, isDataSetADirectory);
         int firstYearRank = firstYear.FindRankFromNameGender(name, gender);
         int lastYearRank = lastYear.FindRankFromNameGender(name, gender);
 
         return lastYearRank-firstYearRank;
     }
-
+    /**Given a startYear and endYear, determines which name moved up or down in rankings the most from the startYear to the endYear regardless of gender*/
     public String LargestChangeInRankInRangeOfYears (String startYear, String endYear) throws IOException {
-        BabyFile firstYear = new BabyFile(startYear, filePath, isDataSetAFile);
+
+        BabyFile firstYear = new BabyFile(startYear, filePath, isDataSetADirectory);
         int max = 0;
         BabyEntry firstBabyEntry = firstYear.getBabyEntries().get(0);
         String name = firstBabyEntry.getName();
@@ -185,15 +212,18 @@ public class BabyData {
     /**Given a name, gender, and year input, outputs the name with that same rank for the specified gender
      * in the most recent year in the form of a list*/
     public List<String> NameGenderInMostRecentYear (String name, String gender, String year) throws IOException {
-        BabyFile babyFile = new BabyFile(year, filePath, isDataSetAFile);
+        if(!genderInputValid(gender)) {
+            return null;
+        }
+        BabyFile babyFile = new BabyFile(year, filePath, isDataSetADirectory);
         int rank = babyFile.FindRankFromNameGender(name, gender);
         List<String> nameGenderPair;
-        BabyFile mostRecentBabyFile = new BabyFile(mostRecentYear, filePath, isDataSetAFile);
+        BabyFile mostRecentBabyFile = new BabyFile(mostRecentYear, filePath, isDataSetADirectory);
         nameGenderPair = mostRecentBabyFile.FindNameGenderFromRank(rank, gender);
         nameGenderPair.add(mostRecentYear);
         return nameGenderPair;
     }
-    /**Given a range of years input and a gender, outputs a HashMap of all names ranked number one
+    /**Given a range of years input and a gender, outputs a HashMap of all names ranked at a specified ranking
      * for that specified gender in that range of years mapped to the number of times the name
      * held the number one ranking*/
     public HashMap<String, Integer> NameFreqAtRankingMap (String startYear, String endYear, String gender, String rank) {
@@ -214,9 +244,12 @@ public class BabyData {
         }
         return namesAtRanking;
     }
-    /**Given a range of years and gender input, outputs the name that was ranked number one the most
+    /**Given a range of years and gender input, outputs the name that was ranked at the specified ranking the most
      * years for that specified gender*/
     public List<String> MostFreqNameAtRanking (String startYear, String endYear, String gender, String rank) {
+        if(!genderInputValid(gender)) {
+            return null;
+        }
         HashMap<String, Integer> nameFreqAtRanking = NameFreqAtRankingMap(startYear, endYear, gender, rank);
         int max = 0;
         String mostFreqNameAtRank = "";
@@ -237,7 +270,7 @@ public class BabyData {
         return mostFreqNameAtRanking;
 
     }
-
+/**Given a range of years, returns the name and gender that is most frequently ranked at a specified ranking regardless of gender*/
     public List<String> MostFreqNameAtRankingBothGenders (String startYear, String endYear, String rank) {
         List<String> maleMostFreqNameAtRank = MostFreqNameAtRanking(startYear, endYear, MALE, rank);
         List<String> femaleMostFreqNameAtRank = MostFreqNameAtRanking(startYear, endYear, FEMALE, rank);
@@ -256,6 +289,7 @@ public class BabyData {
 
     }
 
+    /**Given a range of years, returns the name and gender that is most frequently ranked at a specified ranking regardless of gender. Includes the names meaning. */
     public List<String> MostFreqNameAtRankingBothGendersNameMeaning (String startYear, String endYear, String rank) throws FileNotFoundException {
         NameMeaningsFile nameMeanings = new NameMeaningsFile();
         List<String> mostTopRankedNameAndFreq = MostFreqNameAtRankingBothGenders(startYear, endYear, rank);
@@ -316,6 +350,9 @@ public class BabyData {
      * start with the "most popular" first letter of names, as defined by the MostPopularLetter
      * method above*/
     public List MostPopularLetterNames (String startYear, String endYear, String gender) {
+        if(!genderInputValid(gender)) {
+            return null;
+        }
         HashMap<Character, Integer> firstLetterCountMap;
         firstLetterCountMap = RangeFirstLetterCount(startYear, endYear, gender);
         Character topLetter = MostPopularLetter(firstLetterCountMap);

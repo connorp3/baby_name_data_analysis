@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**Represents all files in a dataset with a URL path. This class processes a URL dataset path and creates an object that is an ArrayList of all the filenames in that dataset*/
+
 public class URLDataSet {
     private ArrayList<String> fileNames;
 
@@ -30,8 +32,9 @@ public class URLDataSet {
         findFileNamesForURLDataSet(urlInfo);
     }
 
-    private void findFileNamesForURLDataSet(String urlInfo) {
-        int indexOfHREF = urlInfo.indexOf("href=\"yob");
+    /**given the urlInputStream, finds all the data file names in the URL dataset*/
+    private void findFileNamesForURLDataSet(String urlInputStream) {
+        int indexOfHREF = urlInputStream.indexOf("href=\"yob");
 
         /**Exits the program if the URL does not contain data files*/
         if (indexOfHREF == -1) {
@@ -41,10 +44,10 @@ public class URLDataSet {
         while ((indexOfHREF) != -1) {
             int firstIndexOfFileName = indexOfHREF + 6;
             int lastIndexOfFileName = indexOfHREF + 17;
-            String fileName = urlInfo.substring(firstIndexOfFileName, lastIndexOfFileName);
+            String fileName = urlInputStream.substring(firstIndexOfFileName, lastIndexOfFileName);
             fileNames.add(fileName);
-            urlInfo = urlInfo.substring(lastIndexOfFileName);
-            indexOfHREF = urlInfo.indexOf("href=\"yob");
+            urlInputStream = urlInputStream.substring(lastIndexOfFileName);
+            indexOfHREF = urlInputStream.indexOf("href=\"yob");
 
         }
     }
