@@ -371,6 +371,28 @@ public class BabyData {
 
     }
 
+    public static void main(String[] args) throws IOException, URISyntaxException {
+        String path = "C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\ssa_complete";
+        BabyData babyData = new BabyData(path, true);
+
+        /**Questions 1-4 from Basic and Questions 1-9 from Complete, without Question 7*/
+        System.out.println(babyData.yearlyNameRank("Emily", "F"));
+        System.out.println(babyData.NameGenderInMostRecentYear("Emily", "F", "2000"));
+        System.out.println(babyData.MostFreqNameAtRanking("1990", "2000", "M", "5"));
+        System.out.println(babyData.MostPopularLetterNames("1990", "2000", "M"));
+        System.out.println(babyData.FindRankFromNameForRangeOfYears("Emily", "F", "2010", "2017"));
+        System.out.println(babyData.DifferenceInRankStartAndEndYear("Emily", "F", "2010", "2017"));
+        System.out.println(babyData.AvgNameRankRangeOfYears("Emily", "F", "2010", "2017"));
+        System.out.println(babyData.AvgNameRankRangeOfYearsBothGenders("Riley", "2010", "2017"));
+        System.out.println(babyData.AvgNameRankRangeOfYearsBothGendersMostRecentYears("Riley", 5));
+        System.out.println(babyData.FindNameFromRankForRangeOfYears("1", "M", "2010", "2017"));
+        System.out.println(babyData.MostFreqNameAtRankingBothGenders("2010", "2017", "5"));
+        System.out.println(babyData.MostFreqNameAtRankingBothGendersNameMeaning("2010", "2017", "5"));
+
+        /**Question 7 from Complete (see ReadMe known bugs)*/
+        System.out.println(babyData.LargestChangeInRankInRangeOfYears("2010", "2017"));
+
+    }
 
 
 }

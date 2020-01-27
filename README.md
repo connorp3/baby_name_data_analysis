@@ -63,6 +63,11 @@ cases because they simply exit the program without returning any values. I still
 tests for these situations, and their functionality can be verified by running the test and seeing
 a relevant error message printed in the console.
 
+When running LargestChangeInRankInRangeOfYears on the complete dataset, the code will always
+print an error statement and exit the program. This is because startYear will almost always
+contain a name that the endYear doesn't contain, and when the method tries to access the rank
+of the name that doesn't exist in the endYear, it prints an error message and exits the code.
+
 Extra credit:
 
 None
@@ -96,6 +101,11 @@ from an earlier year to a later year or vice versa (these differences would be n
 For any question involving an average ranking, I assumed that this average would be a double.
 For question 8 and 9, I broke ties between names that held a rank most often alphabetically, and
 then by female name first.
+
+Tests:
+
+Assumed that each assertEquals represents a test, so 3 assertEquals statements for a given method
+represents the three necessary tests for that method (method answers a question).
 
 ### Impressions
 

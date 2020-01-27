@@ -28,6 +28,11 @@ class BabyDataTest {
         ArrayList<String> test2 = new ArrayList<String>(
                 Arrays.asList("2017: 1", "2018: 3", "2019: 1"));
         assertEquals(test2, b.yearlyNameRank("Emily", "F"));
+
+        ArrayList<String> test3 = new ArrayList<String>(
+                Arrays.asList("2017: 5", "2018: 3", "2019: 5"));
+        assertEquals(test3, b.yearlyNameRank("Robert", "M"));
+
     }
 
     @org.junit.jupiter.api.Test
@@ -42,6 +47,10 @@ class BabyDataTest {
 
         assertEquals(test2, b.NameGenderInMostRecentYear("Stephanie", "F", "2018"));
 
+        ArrayList<String> test3 = new ArrayList<String>(
+                Arrays.asList("Emily", "F", "2019"));
+
+        assertEquals(test3, b.NameGenderInMostRecentYear("Emily", "F", "2017"));
 
     }
 
@@ -54,6 +63,11 @@ class BabyDataTest {
         ArrayList<String> test2 = new ArrayList<String>(
                 Arrays.asList("Emily", "1"));
         assertEquals(test2, b.MostFreqNameAtRanking("2017", "2018", "F", "1"));
+
+        ArrayList<String> test3 = new ArrayList<String>(
+                Arrays.asList("Steve", "3"));
+        assertEquals(test3, b1.MostFreqNameAtRanking("2017", "2020", "M", "1"));
+
     }
 
     @Test
@@ -67,6 +81,10 @@ class BabyDataTest {
                 Arrays.asList("Rachel", "4"));
         assertEquals(test2, b1.MostFreqNameAtRankingBothGenders("2017", "2020", "4"));
 
+        ArrayList<String> test3 = new ArrayList<String>(
+                Arrays.asList("Steve", "3"));
+        assertEquals(test3, b1.MostFreqNameAtRanking("2017", "2020", "M", "1"));
+
     }
     @Test
     void testMostFreqNameAtRankingBothGendersNameMeaning() throws IOException {
@@ -78,6 +96,11 @@ class BabyDataTest {
         ArrayList<String> test2 = new ArrayList<String>(
                 Arrays.asList("Emily", "1", "F", "English Medieval feminine form of Aemilius (see EMIL)."));
         assertEquals(test2, b1.MostFreqNameAtRankingBothGendersNameMeaning("2019", "2020", "1"));
+
+        ArrayList<String> test3 = new ArrayList<String>(
+                Arrays.asList("Rachel", "4", "F", "English, Jewish, French, German, Biblical Means \"ewe\" in Hebrew."));
+        assertEquals(test3, b1.MostFreqNameAtRankingBothGendersNameMeaning("2017", "2020", "4"));
+
     }
 
     @org.junit.jupiter.api.Test
@@ -90,6 +113,10 @@ class BabyDataTest {
         ArrayList<String> test2 = new ArrayList<String>(
                 Arrays.asList("Emily", "Emma"));
         assertEquals(test2, b.MostPopularLetterNames("2017", "2019", "F"));
+
+        ArrayList<String> test3 = new ArrayList<String>(
+                Arrays.asList("Emily"));
+        assertEquals(test3, b1.MostPopularLetterNames("2017", "2020", "F"));
 
     }
 
