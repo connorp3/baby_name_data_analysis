@@ -14,9 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Main {
 
     public static void main (String[] args) throws IOException, URISyntaxException {
-        String URL = "https://www2.cs.duke.edu/courses/spring20/compsci307d/assign/01_data/data/ssa_complete/";
+        /*String URL = "https://www2.cs.duke.edu/courses/spring20/compsci307d/assign/01_data/data/ssa_complete/";
         BabyData b = new BabyData(URL, false);
         System.out.println(b.yearlyNameRank("Rachel", "F"));
+        */
+        BabyData b1 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\poop", true);
+        System.out.println(b1.yearlyNameRank("Rachel", "F"));
 
 
 

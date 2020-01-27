@@ -14,16 +14,18 @@ public class BabyFile {
     private int year;
     private ArrayList<BabyEntry> babyEntries = new ArrayList<>();
     static final String FILE_NAME_PREFIX = "yob";
-    static final int YEAR_IN_FILE_NAME_START = 3;
-    static final int YEAR_IN_FILE_NAME_END = 7;
     static final String URL_DATASET = "https://www2.cs.duke.edu/courses/spring20/compsci307d/assign/01_data/data/ssa_complete/";
+
     /**Creates the BabyFile object by scanning the file for a specified year and creating
      * BabyEntries for each line*/
-    public BabyFile(String strYear, String path) throws IOException {
+    public BabyFile(String strYear, String path, boolean isFile) throws IOException {
         String yearFileString = FILE_NAME_PREFIX + strYear + ".txt";
-        if(path.equals(URL_DATASET)) {
+        if(!isFile) {
             year = Integer.parseInt(strYear);
+            String strBabyFileURL = path + yearFileString;
+            isYearDataURLValid(strBabyFileURL);
             java.net.URL babyFileURL = new URL(path + yearFileString);
+
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(babyFileURL.openStream()));
 
@@ -33,8 +35,9 @@ public class BabyFile {
                 babyEntries.add(babyEntry);
             }
         }
-        else {
+        if(isFile) {
             File yearFile = new File(path + "\\" + yearFileString);
+            doesYearDataExist(yearFile);
             year = Integer.parseInt(strYear);
 
             Scanner input = new Scanner(yearFile);
@@ -51,6 +54,22 @@ public class BabyFile {
 
     public ArrayList<BabyEntry> getBabyEntries() {
         return babyEntries;
+    }
+
+    public void isYearDataURLValid(String dataSetURL) throws IOException {
+        try {
+            new URL(dataSetURL).toURI();
+        } catch (Exception URLNotValid) {
+            System.out.println("ERROR: At least one year inputted is not in the specified dataset");
+            System.exit(0);
+        }
+    }
+
+    private void doesYearDataExist(File dataSet) {
+        if (!dataSet.exists()) {
+            System.out.println("ERROR: At least one year inputted is not in the specified dataset");
+            System.exit(0);
+        }
     }
 
     /**Creates a list of only male or female BabyEntry objects from a BabyFile*/
@@ -78,7 +97,10 @@ public class BabyFile {
         ArrayList<BabyEntry> babyEntriesList = getBabyEntriesForGender(gender);
 
         for(BabyEntry baby : babyEntriesList) {
-
+            if(rank > babyEntriesList.size()) {
+                System.out.println("ERROR: The inputted name does not exist for the specified gender in at least one of the specified year files");
+                System.exit(0);
+            }
             if (!baby.getName().equals(name)) {
                 rank++;
                 continue;

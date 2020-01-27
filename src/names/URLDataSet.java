@@ -1,21 +1,15 @@
 package names;
 
-import org.junit.Assert;
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
 public class URLDataSet {
     private ArrayList<String> fileNames;
 
-    public URLDataSet(String URL) throws IOException, URISyntaxException {
+    public URLDataSet(String URL) throws IOException {
         isURLValid(URL);
         java.net.URL dataSetURL = new URL(URL);
 
@@ -59,6 +53,7 @@ public class URLDataSet {
         return fileNames;
     }
 
+    /**Returns Error Message and exits program if inputted URL is not valid*/
     public void isURLValid(String dataSetURL) throws IOException {
         try {
             new URL(dataSetURL).toURI();

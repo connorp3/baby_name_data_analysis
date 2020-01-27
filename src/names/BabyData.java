@@ -10,6 +10,7 @@ public class BabyData {
     private ArrayList<BabyFile> fileList;
     private String mostRecentYear;
     private String filePath;
+    private boolean isDataSetAFile;
     static final int YEAR_IN_FILE_NAME_START = 3;
     static final int YEAR_IN_FILE_NAME_END = 7;
     static final String MALE = "M";
@@ -20,12 +21,13 @@ public class BabyData {
      * and then creating a list of BabyFile objects and determining the most recent year in the
      * dataset*/
     public BabyData(String path, boolean isFile) throws IOException, URISyntaxException {
+        isDataSetAFile = isFile;
         fileList = new ArrayList<>();
         filePath = path;
         int maxYear = 0;
         String strMaxYear = "2020";
 
-        if(!isFile) {
+        if(!isDataSetAFile) {
             URLDataSet dataSet = new URLDataSet(path);
             ArrayList<String> yearsOfData = new ArrayList<>(dataSet.getFileNames());
             for(String yearFile : yearsOfData) {
@@ -33,13 +35,15 @@ public class BabyData {
                 int year = Integer.parseInt(strYear);
                 if (year >= maxYear) strMaxYear = strYear;
 
-                BabyFile babyFile = new BabyFile(strYear, URL_DATASET);
+                BabyFile babyFile = new BabyFile(strYear, filePath, isDataSetAFile);
                 fileList.add(babyFile);
             }
         }
-        else if(isFile) {
+        else if(isDataSetAFile) {
             File dataSet = new File(path);
+            doesDataSetExist(dataSet);
             String[] files = dataSet.list();
+            isDataSetEmpty(files);
 
 
             for (String file : files) {
@@ -49,23 +53,46 @@ public class BabyData {
                     int year = Integer.parseInt(strYear);
                     if (year >= maxYear) strMaxYear = strYear;
 
-                    BabyFile babyFile = new BabyFile(strYear, filePath);
+                    BabyFile babyFile = new BabyFile(strYear, filePath, isDataSetAFile);
                     fileList.add(babyFile);
                 }
             }
         }
         mostRecentYear = strMaxYear;
     }
-    
+
+    private void isDataSetEmpty(String[] files) {
+        if (files.length == 0) {
+            System.out.println("ERROR: Data Source is empty");
+            System.exit(0);
+        }
+    }
+
+    private void doesDataSetExist(File dataSet) {
+        if (!dataSet.exists()) {
+            System.out.println("ERROR: Data Source does not exist");
+            System.exit(0);
+        }
+    }
+
     /**Given a range of years, outputs a list of BabyFile objects for these years*/
     public ArrayList<BabyFile> RangeOfYearsData (String startYear, String endYear) {
         ArrayList<BabyFile> babyFilesRangeOfYears = new ArrayList<>();
+        int intStartYear = Integer.parseInt(startYear);
+        int intEndYear = Integer.parseInt(endYear);
+        int rangeLength = intEndYear-intStartYear + 1;
         for (BabyFile yearData : fileList) {
             if(yearData.getYear() >= Integer.parseInt(startYear) &&
                     yearData.getYear() <= Integer.parseInt(endYear)) {
                 babyFilesRangeOfYears.add(yearData);
             }
         }
+        /**Outputs an error message if a range of years specified is not in the completely in the dataset*/
+        if(babyFilesRangeOfYears.size() < rangeLength) {
+            System.out.println("ERROR: At least one year in range is not represented in the dataset");
+            System.exit(0);
+        }
+
         return babyFilesRangeOfYears;
     }
 
@@ -121,8 +148,8 @@ public class BabyData {
 
     public int DifferenceInRankStartAndEndYear (String name, String gender, String startYear, String endYear) throws IOException {
 
-        BabyFile firstYear = new BabyFile(startYear, filePath);
-        BabyFile lastYear = new BabyFile(endYear, filePath);
+        BabyFile firstYear = new BabyFile(startYear, filePath, isDataSetAFile);
+        BabyFile lastYear = new BabyFile(endYear, filePath, isDataSetAFile);
         int firstYearRank = firstYear.FindRankFromNameGender(name, gender);
         int lastYearRank = lastYear.FindRankFromNameGender(name, gender);
 
@@ -130,7 +157,7 @@ public class BabyData {
     }
 
     public String LargestChangeInRankInRangeOfYears (String startYear, String endYear) throws IOException {
-        BabyFile firstYear = new BabyFile(startYear, filePath);
+        BabyFile firstYear = new BabyFile(startYear, filePath, isDataSetAFile);
         int max = 0;
         BabyEntry firstBabyEntry = firstYear.getBabyEntries().get(0);
         String name = firstBabyEntry.getName();
@@ -158,10 +185,10 @@ public class BabyData {
     /**Given a name, gender, and year input, outputs the name with that same rank for the specified gender
      * in the most recent year in the form of a list*/
     public List<String> NameGenderInMostRecentYear (String name, String gender, String year) throws IOException {
-        BabyFile babyFile = new BabyFile(year, filePath);
+        BabyFile babyFile = new BabyFile(year, filePath, isDataSetAFile);
         int rank = babyFile.FindRankFromNameGender(name, gender);
         List<String> nameGenderPair;
-        BabyFile mostRecentBabyFile = new BabyFile(mostRecentYear, filePath);
+        BabyFile mostRecentBabyFile = new BabyFile(mostRecentYear, filePath, isDataSetAFile);
         nameGenderPair = mostRecentBabyFile.FindNameGenderFromRank(rank, gender);
         nameGenderPair.add(mostRecentYear);
         return nameGenderPair;
