@@ -1,20 +1,26 @@
 package names;
 
+import org.junit.Assert;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
 public class URLDataSet {
     private ArrayList<String> fileNames;
 
-    public URLDataSet(String URL) throws IOException {
-        ArrayList<File> files = new ArrayList<>();
-        java.net.URL oracle = new URL(URL);
+    public URLDataSet(String URL) throws IOException, URISyntaxException {
+        isURLValid(URL);
+        java.net.URL dataSetURL = new URL(URL);
+
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(oracle.openStream()));
+                new InputStreamReader(dataSetURL.openStream()));
 
         String inputLine;
         StringBuilder sb = new StringBuilder();
@@ -26,9 +32,18 @@ public class URLDataSet {
         in.close();
 
         String urlInfo = sb.toString();
-        int indexOfHREF = urlInfo.indexOf("href=\"yob");
         fileNames = new ArrayList<>();
+        findFileNamesForURLDataSet(urlInfo);
+    }
 
+    private void findFileNamesForURLDataSet(String urlInfo) {
+        int indexOfHREF = urlInfo.indexOf("href=\"yob");
+
+        /**Exits the program if the URL does not contain data files*/
+        if (indexOfHREF == -1) {
+            System.out.println("ERROR: Data Source is empty");
+            System.exit(0);
+        }
         while ((indexOfHREF) != -1) {
             int firstIndexOfFileName = indexOfHREF + 6;
             int lastIndexOfFileName = indexOfHREF + 17;
@@ -43,4 +58,14 @@ public class URLDataSet {
     public ArrayList<String> getFileNames() {
         return fileNames;
     }
+
+    public void isURLValid(String dataSetURL) throws IOException {
+        try {
+            new URL(dataSetURL).toURI();
+        } catch (Exception URLNotValid) {
+            System.out.println("ERROR: This URL is not valid");
+            System.exit(0);
+        }
+    }
+
 }

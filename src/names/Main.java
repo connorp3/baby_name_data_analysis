@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
@@ -12,11 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Main {
 
-    public static void main (String[] args) throws IOException {
-
+    public static void main (String[] args) throws IOException, URISyntaxException {
         String URL = "https://www2.cs.duke.edu/courses/spring20/compsci307d/assign/01_data/data/ssa_complete/";
-
-        BabyData b = new BabyData(URL);
+        BabyData b = new BabyData(URL, false);
         System.out.println(b.yearlyNameRank("Rachel", "F"));
 
 

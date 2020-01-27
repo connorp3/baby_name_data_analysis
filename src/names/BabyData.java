@@ -1,5 +1,6 @@
 package names;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**Represents an entire dataset of baby name data over a range of years. BabyData object consists of
@@ -18,14 +19,14 @@ public class BabyData {
     /**Creates the BabyData object by specifying the directory with all files in the dataset
      * and then creating a list of BabyFile objects and determining the most recent year in the
      * dataset*/
-    public BabyData(String path) throws IOException {
+    public BabyData(String path, boolean isFile) throws IOException, URISyntaxException {
         fileList = new ArrayList<>();
         filePath = path;
         int maxYear = 0;
         String strMaxYear = "2020";
 
-        if(path.equals(URL_DATASET)) {
-            URLDataSet dataSet = new URLDataSet(URL_DATASET);
+        if(!isFile) {
+            URLDataSet dataSet = new URLDataSet(path);
             ArrayList<String> yearsOfData = new ArrayList<>(dataSet.getFileNames());
             for(String yearFile : yearsOfData) {
                 String strYear = yearFile.substring(YEAR_IN_FILE_NAME_START, YEAR_IN_FILE_NAME_END);
@@ -36,7 +37,7 @@ public class BabyData {
                 fileList.add(babyFile);
             }
         }
-        else {
+        else if(isFile) {
             File dataSet = new File(path);
             String[] files = dataSet.list();
 
@@ -55,6 +56,7 @@ public class BabyData {
         }
         mostRecentYear = strMaxYear;
     }
+    
     /**Given a range of years, outputs a list of BabyFile objects for these years*/
     public ArrayList<BabyFile> RangeOfYearsData (String startYear, String endYear) {
         ArrayList<BabyFile> babyFilesRangeOfYears = new ArrayList<>();

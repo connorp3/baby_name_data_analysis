@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,11 +12,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BabyDataTest {
+    BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data", true);
+    BabyData b1 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2", true);
+    BabyData b2 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data3", true);
+
+    BabyDataTest() throws IOException, URISyntaxException {
+    }
 
     @org.junit.jupiter.api.Test
     void testYearlyNameRank() throws IOException {
-        BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
-
         ArrayList<String> test1 = new ArrayList<String>(
                 Arrays.asList("2017: 3", "2018: 6", "2019: 6"));
         assertEquals(test1, b.yearlyNameRank("Ben","M"));
@@ -28,7 +32,6 @@ class BabyDataTest {
 
     @org.junit.jupiter.api.Test
     void testNameGenderInMostRecentYear() throws IOException {
-        BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
 
         ArrayList<String> test1 = new ArrayList<String>(
                 Arrays.asList("Noah", "M", "2019"));
@@ -44,8 +47,6 @@ class BabyDataTest {
 
     @org.junit.jupiter.api.Test
     void testMostFreqNameAtRanking() throws IOException {
-        BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
-
         ArrayList<String> test1 = new ArrayList<String>(
                 Arrays.asList("Emily", "2"));
         assertEquals(test1, b.MostFreqNameAtRanking("2017", "2019", "F", "1"));
@@ -57,33 +58,30 @@ class BabyDataTest {
 
     @Test
     void testMostFreqNameAtRankingBothGenders() throws IOException {
-        BabyData b2 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2");
 
         ArrayList<String> test1 = new ArrayList<String>(
                 Arrays.asList("Adam", "3"));
-        assertEquals(test1, b2.MostFreqNameAtRankingBothGenders("2017", "2020", "2"));
+        assertEquals(test1, b1.MostFreqNameAtRankingBothGenders("2017", "2020", "2"));
 
         ArrayList<String> test2 = new ArrayList<String>(
                 Arrays.asList("Rachel", "4"));
-        assertEquals(test2, b2.MostFreqNameAtRankingBothGenders("2017", "2020", "4"));
+        assertEquals(test2, b1.MostFreqNameAtRankingBothGenders("2017", "2020", "4"));
 
     }
     @Test
     void testMostFreqNameAtRankingBothGendersNameMeaning() throws IOException {
-        BabyData b2 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2");
 
         ArrayList<String> test1 = new ArrayList<String>(
                 Arrays.asList("Steve", "3", "M", "English Short form of N"));
-        assertEquals(test1, b2.MostFreqNameAtRankingBothGendersNameMeaning("2017", "2019",  "1"));
+        assertEquals(test1, b1.MostFreqNameAtRankingBothGendersNameMeaning("2017", "2019",  "1"));
 
         ArrayList<String> test2 = new ArrayList<String>(
                 Arrays.asList("Emily", "1", "F", "English Medieval feminine form of Aemilius (see EMIL)."));
-        assertEquals(test2, b2.MostFreqNameAtRankingBothGendersNameMeaning("2019", "2020", "1"));
+        assertEquals(test2, b1.MostFreqNameAtRankingBothGendersNameMeaning("2019", "2020", "1"));
     }
 
     @org.junit.jupiter.api.Test
     void testMostPopularLetterNames() throws IOException {
-        BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
 
         ArrayList<String> test1 = new ArrayList<String>(
                 Arrays.asList("Ben", "Bob"));
@@ -98,7 +96,6 @@ class BabyDataTest {
 
     @Test
     void testFindRankFromNameForRangeOfYears() throws IOException {
-        BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
 
         ArrayList<String> test1 = new ArrayList<String>(
                 Arrays.asList("2017: 3", "2018: 6"));
@@ -117,7 +114,6 @@ class BabyDataTest {
 
     @Test
     void testDifferenceInRankStartAndEndYear() throws IOException {
-        BabyData b = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data");
 
         assertEquals(-3, b.DifferenceInRankStartAndEndYear("Ben", "M", "2018", "2017"));
         assertEquals(0, b.DifferenceInRankStartAndEndYear("Ben", "M", "2018", "2019"));
@@ -126,7 +122,6 @@ class BabyDataTest {
 
     @Test
     void testLargestChangeInRankInRangeOfYears() throws IOException {
-        BabyData b1 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2");
 
         assertEquals("Emily, F", b1.LargestChangeInRankInRangeOfYears("2017", "2019"));
         assertEquals("Robert, M", b1.LargestChangeInRankInRangeOfYears("2017", "2020"));
@@ -135,7 +130,6 @@ class BabyDataTest {
 
     @Test
     void testAvgNameRankRangeOfYears() throws IOException {
-        BabyData b1 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2");
 
         assertEquals(2.25, b1.AvgNameRankRangeOfYears("Emily", "F", "2017", "2020"));
         assertEquals(6.0, b1.AvgNameRankRangeOfYears("Jeffery", "M", "2017", "2020"));
@@ -144,7 +138,6 @@ class BabyDataTest {
 
     @Test
     void testAvgNameRankRangeOfYearsBothGenders() throws IOException {
-        BabyData b2 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data3");
 
         double expectedMale = 10.0/3.0;
         assertEquals("Male: " + expectedMale + "\n" + "Female: 1.0", b2.AvgNameRankRangeOfYearsBothGenders("Emily", "2017", "2019"));
@@ -156,7 +149,6 @@ class BabyDataTest {
 
     @Test
     void testFindNameFromRankForRangeOfYears() throws IOException {
-        BabyData b1 = new BabyData("C:\\Users\\conno\\Documents\\CS307\\data_cgp19\\data\\test_data2");
 
         List<String> test1 = new ArrayList<>(Arrays.asList("2018: Emily", "2019: Stephanie", "2020: Emily"));
         assertEquals(test1, b1.FindNameFromRankForRangeOfYears("1", "F", "2018", "2020"));
